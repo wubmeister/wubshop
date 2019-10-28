@@ -27,7 +27,7 @@ class Router
         } else {
             foreach ($chunks as $index => $chunk) {
                 if ($key) {
-                    if ($chunk == "add" || $chunk == "edit") {
+                    if ($chunk == "add" || $chunk == "edit" || $chunk == "delete") {
                         $params["action"] = $chunk;
                     } else {
                         $params["id"] = $chunk;
@@ -44,9 +44,6 @@ class Router
                         if (isset($params["allowTail"]) && $params["allowTail"] == true) {
                             $params["tail"] = implode('/', array_slice($chunks, $index + 1));
                         }
-                        // else if ($index < count($chunks) - 1) {
-                        //     return null;
-                        // }
                     }
                 } else {
                     return null;

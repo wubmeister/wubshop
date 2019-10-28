@@ -76,6 +76,24 @@ class Schema
             $err = $stmt->errorInfo();
             throw new Exception("Execute error: {$err[2]}");
         }
-        return $this->connection->lastInsertId();
+    }
+
+    public function delete(string $tableName, $where)
+    {
+        $query = Query::factory($where);
+        $sql = "DELETE FROM {$tableName}" . $query->getSql();
+
+        $stmt = $this->connection->prepare($sql);
+        if (!$stmt) {
+            $err = $this->connection->errorInfo;
+            throw new Exception("Prepare error: {$err[2]}");
+        }
+        foreach ($query->getBindValues() as $index => $value) {
+            $stmt->bindValue($index + 1, $value);
+        }
+        if (!$stmt->execute()) {
+            $err = $stmt->errorInfo();
+            throw new Exception("Execute error: {$err[2]}");
+        }
     }
 }

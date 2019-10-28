@@ -2,5 +2,9 @@
 
 <p>Title: <?php echo $product["title"]; ?></p>
 
-<p><a href="/products/<?php echo $product["id"]; ?>/edit">Edit</a></p>
+<p>
+    <a href="/products/<?php echo $product["id"]; ?>/edit">Edit</a>
+    &middot;
+    <a href="/products/<?php echo $product["id"]; ?>/delete">Delete</a>
+</p>
 <p><a href="/products">Back to index</a></p>

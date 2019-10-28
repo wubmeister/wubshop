@@ -40,6 +40,7 @@ class Products
 
                 case "DELETE":
                     if ($id) $action = "delete";
+                    else return new HtmlResponse("<h1>405 Method Not Allowed</h1>", 405);
                     break;
 
                 case "GET":
@@ -154,6 +155,30 @@ class Products
 
         $view->assign("product", $product);
         $view->assign("form", $form);
+
+        $this->layout->assign("content", $view);
+        return new HtmlResponse($this->layout->render());
+    }
+
+    public function delete($id)
+    {
+        $product = $this->table->findOne([ "id" => (int)$id ]);
+
+        if (!$product) {
+            return new HtmlResponse("<h1>404 Not Found</h1>", 404);
+        }
+
+        if ($this->request->getMethod() == "POST") {
+            $post = $this->request->getParsedBody();
+            if (isset($post["confirm"]) && $post["confirm"] == "1") {
+                $this->table->delete([ "id" => $id ]);
+                return new RedirectResponse("/products");
+            }
+        }
+
+        $view = new View(Template::find("products/delete"));
+
+        $view->assign("product", $product);
 
         $this->layout->assign("content", $view);
         return new HtmlResponse($this->layout->render());

@@ -45,4 +45,9 @@ class Table
         $data["modified"] = date("Y-m-d H:i:s");
         return $this->schema->update($this->name, $data, $where);
     }
+
+    public function delete($where)
+    {
+        return $this->schema->delete($this->name, $where);
+    }
 }
