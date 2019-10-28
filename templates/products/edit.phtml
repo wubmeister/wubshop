@@ -1,6 +1,6 @@
 <h2>Edit product</h2>
 
-<form method="post" action="/products/edit/<?php echo $product["id"]; ?>">
+<form method="post" action="/products/edit/<?php echo $product->id; ?>">
 
     <?php $titleField = $form->getField("title"); ?>
     <div class="field">
@@ -9,5 +9,6 @@
     </div>
 
     <button type="submit">Save</button>
+    <button type="button" onclick="history.back()">Cancel</button>
 
 </form>

@@ -141,7 +141,7 @@ class Products
 
         $form = new Form();
         $form->addField(new Field("title"));
-        $form->setValues($product);
+        $form->setValues($product->toArray());
 
         if ($this->request->getMethod() == "POST") {
             $post = $this->request->getParsedBody();

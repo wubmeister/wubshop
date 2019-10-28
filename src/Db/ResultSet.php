@@ -107,7 +107,11 @@ class ResultSet implements Iterator
             $err = $stmt->errorInfo();
             throw new Exception("Execute error: {$err[2]}");
         }
-        $this->rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $this->rows = [];
+        foreach ($rows as $row) {
+            $this->rows[] = new Row($this->table, $row, true);
+        }
         $this->count = count($this->rows);
     }
 
