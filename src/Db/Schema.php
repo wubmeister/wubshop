@@ -29,4 +29,27 @@ class Schema
 
         return $this->tables[$name];
     }
+
+    public function insert(string $tableName, array $data)
+    {
+        $keys = array_keys($data);
+        $sql = "INSERT INTO {$tableName} (" .
+            implode(', ', $keys) .
+            ") VALUES (" .
+            implode(", ", array_fill(0, count($keys), '?')) .
+            ")";
+        $stmt = $this->connection->prepare($sql);
+        if (!$stmt) {
+            $err = $this->connection->errorInfo;
+            throw new Exception("Prepare error: {$err[2]}");
+        }
+        foreach ($keys as $index => $key) {
+            $stmt->bindValue($index + 1, $data[$key]);
+        }
+        if (!$stmt->execute()) {
+            $err = $stmt->errorInfo();
+            throw new Exception("Execute error: {$err[2]}");
+        }
+        return $this->connection->lastInsertId();
+    }
 }

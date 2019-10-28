@@ -15,6 +15,11 @@ class Field
         if (isset($options["is_array"])) $this->isArray = (bool)$options["is_array"];
     }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     public function setValue($value, $validate = false)
     {
         $this->value = $value;

@@ -23,14 +23,20 @@ class Table
         return $this->name;
     }
 
-    public function find()
+    public function find($query = null)
     {
-        return new ResultSet($this, null);
+        return new ResultSet($this, $query);
     }
 
     public function findOne($query)
     {
         $resultSet = $this->find($query);
         return $resultSet->current();
+    }
+
+    public function insert($data)
+    {
+        $data["created"] = date("Y-m-d H:i:s");
+        return $this->schema->insert($this->name, $data);
     }
 }

@@ -2,21 +2,44 @@
 
 namespace App\Db;
 
+use Exception;
+
 class Query
 {
+    protected $sql;
+    protected $params = [];
+
     public static function factory($query)
     {
         if ($query instanceof Query) return $query;
-        return new Query();
+        return new Query($query);
+    }
+
+    public function __construct($conditions)
+    {
+        if (is_array($conditions)) {
+            $this->parseConditions($conditions);
+        }
+    }
+
+    protected function parseConditions($conditions)
+    {
+        $parts = [];
+        foreach ($conditions as $key => $value) {
+            $parts[] = "{$key} = ?";
+            $this->params[] = $value;
+        }
+
+        $this->sql = implode(" AND ", $parts);
     }
 
     public function getSql($clause = "WHERE")
     {
-        return "";
+        return $this->sql ? " WHERE {$this->sql}" : "";
     }
 
     public function getBindValues()
     {
-        return [];
+        return $this->params;
     }
 }

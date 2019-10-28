@@ -2,6 +2,6 @@
 
 <ul>
 <?php foreach ($products as $product): ?>
-<li><?php echo $product["title"]; ?></li>
+<li><a href="/products/<?php echo $product["id"]; ?>"><?php echo $product["title"]; ?></a></li>
 <?php endforeach; ?>
 </ul>

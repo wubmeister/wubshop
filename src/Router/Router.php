@@ -27,8 +27,12 @@ class Router
         } else {
             foreach ($chunks as $index => $chunk) {
                 if ($key) {
-                    $params["id"] = $chunk;
-                    $params["ids"][$key] = $chunk;
+                    if ($chunk == "add" || $chunk == "edit") {
+                        $params["action"] = $chunk;
+                    } else {
+                        $params["id"] = $chunk;
+                        $params["ids"][$key] = $chunk;
+                    }
                 } else if (isset($collection[$chunk])) {
                     $params["id"] = null;
                     $handler = $collection[$chunk]["handler"];
@@ -44,8 +48,6 @@ class Router
                         //     return null;
                         // }
                     }
-                } else if ($chunk == "add" || $chunk == "edit") {
-                    $params["action"] = $chunk;
                 } else {
                     return null;
                 }
