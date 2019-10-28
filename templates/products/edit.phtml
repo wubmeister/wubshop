@@ -1,0 +1,13 @@
+<h2>Edit product</h2>
+
+<form method="post" action="/products/edit/<?php echo $product["id"]; ?>">
+
+    <?php $titleField = $form->getField("title"); ?>
+    <div class="field">
+        <label for="<?php echo $titleField->getId(); ?>">Title</label>
+        <input type="text" name="<?php echo $titleField->getFullName(); ?>" id="<?php echo $titleField->getId(); ?>" value="<?php echo $titleField->getValue(); ?>" />
+    </div>
+
+    <button type="submit">Save</button>
+
+</form>

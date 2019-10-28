@@ -124,4 +124,38 @@ class Products
         $this->layout->assign("content", $view);
         return new HtmlResponse($this->layout->render());
     }
+
+    public function edit($id)
+    {
+        return $this->update($id);
+    }
+
+    public function update($id)
+    {
+        $product = $this->table->findOne([ "id" => (int)$id ]);
+
+        if (!$product) {
+            return new HtmlResponse("<h1>404 Not Found</h1>", 404);
+        }
+
+        $form = new Form();
+        $form->addField(new Field("title"));
+        $form->setValues($product);
+
+        if ($this->request->getMethod() == "POST") {
+            $post = $this->request->getParsedBody();
+            $form->setValues($post);
+            $values = $form->getValues();
+            $this->table->update($values, [ "id" => $id ]);
+            return new RedirectResponse("/products/{$id}");
+        }
+
+        $view = new View(Template::find("products/edit"));
+
+        $view->assign("product", $product);
+        $view->assign("form", $form);
+
+        $this->layout->assign("content", $view);
+        return new HtmlResponse($this->layout->render());
+    }
 }

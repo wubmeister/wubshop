@@ -39,4 +39,10 @@ class Table
         $data["created"] = date("Y-m-d H:i:s");
         return $this->schema->insert($this->name, $data);
     }
+
+    public function update($data, $where)
+    {
+        $data["modified"] = date("Y-m-d H:i:s");
+        return $this->schema->update($this->name, $data, $where);
+    }
 }

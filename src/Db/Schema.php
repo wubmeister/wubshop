@@ -52,4 +52,30 @@ class Schema
         }
         return $this->connection->lastInsertId();
     }
+
+    public function update(string $tableName, array $data, $where)
+    {
+        $keys = array_keys($data);
+        $sql = "UPDATE {$tableName} SET " . implode(' = ?, ', $keys) . " = ?";
+        $query = Query::factory($where);
+        $sql .= $query->getSql();
+
+        $stmt = $this->connection->prepare($sql);
+        if (!$stmt) {
+            $err = $this->connection->errorInfo;
+            throw new Exception("Prepare error: {$err[2]}");
+        }
+        foreach ($keys as $index => $key) {
+            $stmt->bindValue($index + 1, $data[$key]);
+        }
+        $offset = count($keys) + 1;
+        foreach ($query->getBindValues() as $index => $value) {
+            $stmt->bindValue($offset + $index, $value);
+        }
+        if (!$stmt->execute()) {
+            $err = $stmt->errorInfo();
+            throw new Exception("Execute error: {$err[2]}");
+        }
+        return $this->connection->lastInsertId();
+    }
 }
