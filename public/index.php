@@ -8,6 +8,8 @@ use Zend\Diactoros\ServerRequest;
 
 require_once("../vendor/autoload.php");
 
+$config = include("../config/config.local.php");
+
 $request = new ServerRequest(
     $_SERVER,
     $_FILES,
@@ -42,7 +44,7 @@ if (!$route) {
         $request = $request->withAttribute($key, $value);
     }
 
-    $connection = new Connection("mysql", [ "host" => "127.0.0.1", "dbname" => "wubshop", "username" => "root", "password" => "xXjh7fNcu8G8NAU9" ]);
+    $connection = new Connection($config["db"]["driver"], $config["db"]["config"]);
     $controller = new $controllerClass($connection);
     $response = $controller($request);
 
