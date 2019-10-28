@@ -10,6 +10,11 @@ use Zend\Diactoros\Response\HtmlResponse;
 
 class Products
 {
+    public function __construct(Connection $dbConnection)
+    {
+        $this->table = $dbConnection->schema()->table("product");
+    }
+
     public function __invoke(ServerRequestInterface $request)
     {
         $method = $request->getMethod();
@@ -51,9 +56,7 @@ class Products
 
     public function index()
     {
-        $connection = new Connection("mysql", [ "host" => "127.0.0.1", "dbname" => "wubshop", "username" => "root", "password" => "xXjh7fNcu8G8NAU9" ]);
-        $table = $connection->schema()->table("product");
-        $products = $table->fetchAll();
+        $products = $this->table->find();
 
         $layout = new View(Template::find("layout"));
         $view = new View(Template::find("products/index"));

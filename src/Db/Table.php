@@ -13,8 +13,18 @@ class Table
         $this->name = $name;
     }
 
-    public function fetchAll()
+    public function getSchema()
     {
-        return $this->schema->fetchAll($this->name);
+        return $this->schema;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function find()
+    {
+        return new ResultSet($this, null);
     }
 }

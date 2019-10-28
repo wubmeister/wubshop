@@ -1,5 +1,6 @@
 <?php
 
+use App\Db\Connection;
 use App\Controller\Products;
 use Zend\Diactoros\ServerRequest;
 
@@ -17,6 +18,7 @@ $request = new ServerRequest(
     $_POST
 );
 
-$controller = new Products();
+$connection = new Connection("mysql", [ "host" => "127.0.0.1", "dbname" => "wubshop", "username" => "root", "password" => "xXjh7fNcu8G8NAU9" ]);
+$controller = new Products($connection);
 $response = $controller($request);
 echo $response->getBody();

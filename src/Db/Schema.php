@@ -6,24 +6,19 @@ use Exception;
 
 class Schema
 {
-    protected $conn;
+    protected $connection;
     protected $name;
     protected $tables = [];
 
     public function __construct(Connection $connection, string $name)
     {
-        $this->conn = $connection;
+        $this->connection = $connection;
         $this->name = $name;
     }
 
-    public function fetchAll($table)
+    public function getConnection()
     {
-        $stmt = $this->conn->query("SELECT * FROM {$table}");
-        if (!$stmt) {
-            $err = $this->conn->errorInfo();
-            throw new Exception($err[2]);
-        }
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $this->connection;
     }
 
     public function table($name)
