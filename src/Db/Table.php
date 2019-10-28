@@ -27,4 +27,10 @@ class Table
     {
         return new ResultSet($this, null);
     }
+
+    public function findOne($query)
+    {
+        $resultSet = $this->find($query);
+        return $resultSet->current();
+    }
 }

@@ -46,6 +46,7 @@ class Products
             return new HtmlResponse("<h1>401 Unauthorized</h1>", 401);
         }
 
+        if ($id) return $this->$action($id);
         return $this->$action();
     }
 
@@ -65,6 +66,23 @@ class Products
 
         $layout->assign("content", $view);
 
+        return new HtmlResponse($layout->render());
+    }
+
+    public function show($id)
+    {
+        $product = $this->table->findOne([ "id" => 1 ]);
+
+        if (!$product) {
+            return new HtmlResponse("<h1>404 Not Found</h1>", 404);
+        }
+
+        $layout = new View(Template::find("layout"));
+        $view = new View(Template::find("products/show"));
+
+        $view->assign("product", $product);
+
+        $layout->assign("content", $view);
         return new HtmlResponse($layout->render());
     }
 }
