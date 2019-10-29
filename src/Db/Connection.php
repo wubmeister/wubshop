@@ -9,8 +9,9 @@ class Connection
     protected $pdo;
     protected $defaultDbName = "global";
     protected $schemas = [];
+    protected $registeredSchemas;
 
-    public function __construct($driver, array $options)
+    public function __construct($driver, array $options, array $schemas = [])
     {
         $username = null;
         if (isset($options["username"])) {
@@ -39,6 +40,8 @@ class Connection
         $dsn = $driver . ':' . implode(";", $dsnParts);
 
         $this->pdo = new PDO($dsn, $username, $password, $opts);
+
+        $this->registeredSchemas = $schemas;
     }
 
     public function beginTransaction()
@@ -115,7 +118,15 @@ class Connection
     {
         if (!$name) $name = $this->defaultDbName;
         if (!isset($this->schemas[$name])) {
-            $this->schemas[$name] = new Schema($this, $name);
+            $schemaName = $name;
+            if (isset($this->registeredSchemas[$name])) {
+                $schemaName = $this->registeredSchemas[$name];
+            }
+            if (isset($this->schemas[$schemaName])) {
+                $this->schemas[$name] = $this->schemas[$schemaName];
+            } else {
+                $this->schemas[$name] = new Schema($this, $schemaName);
+            }
         }
         return $this->schemas[$name];
     }

@@ -19,7 +19,7 @@ class Products
 
     public function __construct(Connection $dbConnection)
     {
-        $this->table = $dbConnection->schema()->table("product");
+        $this->table = $dbConnection->schema("webshop")->table("product");
     }
 
     public function __invoke(ServerRequestInterface $request)
