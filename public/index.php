@@ -2,6 +2,7 @@
 
 use App\Db\Connection;
 use App\Controller\Products;
+use App\HttpException;
 use App\Router\Router;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\ServerRequest;
@@ -32,22 +33,26 @@ $router = new Router([
 ]);
 
 $route = $router->resolve($request->getMethod(), $request->getUri()->getPath());
-if (!$route) {
+try {
+    if (!$route) {
 
-    $response = new HtmlResponse("<h1>404 Not Found</h1>", 404);
+        throw new HttpException(404);
 
-} else {
+    } else {
 
-    $controllerClass = $route["handler"];
-    $params = $route["params"];
-    foreach ($params as $key => $value) {
-        $request = $request->withAttribute($key, $value);
+        $controllerClass = $route["handler"];
+        $params = $route["params"];
+        foreach ($params as $key => $value) {
+            $request = $request->withAttribute($key, $value);
+        }
+
+        $connection = new Connection($config["db"]["driver"], $config["db"]["config"]);
+        $controller = new $controllerClass($connection);
+        $response = $controller($request);
+
     }
-
-    $connection = new Connection($config["db"]["driver"], $config["db"]["config"]);
-    $controller = new $controllerClass($connection);
-    $response = $controller($request);
-
+} catch (HttpException $ex) {
+    $response = new HtmlResponse("<h1>" . $ex->getMessage() . "</h1>", $ex->statusCode);
 }
 
 http_response_code($response->getStatusCode());

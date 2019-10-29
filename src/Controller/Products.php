@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Db\Connection;
 use App\Form\Field\Field;
 use App\Form\Form;
+use App\HttpException;
 use App\Template;
 use App\View\View;
 use Psr\Http\Message\ServerRequestInterface;
@@ -40,7 +41,7 @@ class Products
 
                 case "DELETE":
                     if ($id) $action = "delete";
-                    else return new HtmlResponse("<h1>405 Method Not Allowed</h1>", 405);
+                    else throw new HttpException(405);
                     break;
 
                 case "GET":
@@ -48,15 +49,15 @@ class Products
                     break;
 
                 default:
-                    return new HtmlResponse("<h1>405 Method Not Allowed</h1>", 405);
+                    throw new HttpException(405);
             }
         }
 
         if (!method_exists($this, $action)) {
-            return new HtmlResponse("<h1>404 Not Found</h1>", 404);
+            throw new HttpException(404);
         }
         if (!$this->isAllowed($action)) {
-            return new HtmlResponse("<h1>401 Unauthorized</h1>", 401);
+            throw new HttpException(401);
         }
 
         $this->request = $request;
@@ -89,7 +90,7 @@ class Products
         $product = $this->table->findOne([ "id" => (int)$id ]);
 
         if (!$product) {
-            return new HtmlResponse("<h1>404 Not Found</h1>", 404);
+            throw new HttpException(404);
         }
 
         $view = new View(Template::find("products/show"));
@@ -136,7 +137,7 @@ class Products
         $product = $this->table->findOne([ "id" => (int)$id ]);
 
         if (!$product) {
-            return new HtmlResponse("<h1>404 Not Found</h1>", 404);
+            throw new HttpException(404);
         }
 
         $form = new Form();
@@ -165,7 +166,7 @@ class Products
         $product = $this->table->findOne([ "id" => (int)$id ]);
 
         if (!$product) {
-            return new HtmlResponse("<h1>404 Not Found</h1>", 404);
+            throw new HttpException(404);
         }
 
         if ($this->request->getMethod() == "POST") {
