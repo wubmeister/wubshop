@@ -30,6 +30,20 @@ class Field
         return $this->value;
     }
 
+    protected function validate()
+    {
+        $value = $this->value;
+        foreach ($this->inputFilters as $if) {
+            $value = $if->parseValue($value);
+            if (!$if->isValid()) {
+                $this->errors[] = $if->getError();
+                $this->valid = false;
+                break;
+            }
+        }
+        $this->value = $value;
+    }
+
     public function getFullName()
     {
         if ($this->parent) {
