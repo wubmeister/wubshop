@@ -24,11 +24,11 @@ class Subform extends Field
         return $fields;
     }
 
-    public function setValue($value, $validate = false)
+    public function setValue($value, $filter = false)
     {
         foreach ($value as $key => $val) {
             if (isset($this->fields[$key])) {
-                $this->fields[$key]->setValue($val, $validate);
+                $this->fields[$key]->setValue($val, $filter);
             }
         }
     }

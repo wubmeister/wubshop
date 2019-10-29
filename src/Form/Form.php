@@ -25,11 +25,11 @@ class Form
         return $fields;
     }
 
-    public function setValues(array $values, $validate = false)
+    public function setValues(array $values, $filter = false)
     {
         foreach ($values as $key => $value) {
             if (isset($this->fields[$key])) {
-                $this->fields[$key]->setValue($value, $validate);
+                $this->fields[$key]->setValue($value, $filter);
             }
         }
     }

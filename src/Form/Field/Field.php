@@ -20,7 +20,7 @@ class Field
         return $this->name;
     }
 
-    public function setValue($value, $validate = false)
+    public function setValue($value, $filter = false)
     {
         $this->value = $value;
     }
@@ -30,7 +30,7 @@ class Field
         return $this->value;
     }
 
-    protected function validate()
+    protected function filter()
     {
         $value = $this->value;
         foreach ($this->inputFilters as $if) {
