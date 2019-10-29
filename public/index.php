@@ -4,6 +4,7 @@ use App\Db\Connection;
 use App\Controller\Products;
 use App\HttpException;
 use App\Router\Router;
+use App\Session\Session;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\ServerRequest;
 
@@ -47,6 +48,10 @@ try {
         }
 
         $connection = new Connection($config["db"]["driver"], $config["db"]["config"]);
+        $session = new Session($connection);
+
+        unset($session->hello);
+
         $controller = new $controllerClass($connection);
         $response = $controller($request);
 
