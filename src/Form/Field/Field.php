@@ -7,12 +7,16 @@ class Field
     protected $name;
     protected $value;
     protected $isArray;
+    protected $required;
     protected $parent;
+    protected $valid = true;
+    protected $errors = [];
 
     public function __construct($name, array $options = [])
     {
         $this->name = $name;
         if (isset($options["is_array"])) $this->isArray = (bool)$options["is_array"];
+        if (isset($options["required"])) $this->isArray = (bool)$options["required"];
     }
 
     public function getName()
@@ -30,8 +34,19 @@ class Field
         return $this->value;
     }
 
+    public function isRequired()
+    {
+        return $this->required;
+    }
+
     protected function filter()
     {
+        if ($this->required && empty($value)) {
+            $this->errors[] = "This field is required";
+            $this->valid = false;
+            return;
+        }
+
         $value = $this->value;
         foreach ($this->inputFilters as $if) {
             $value = $if->parseValue($value);
