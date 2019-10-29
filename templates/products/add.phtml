@@ -6,6 +6,13 @@
     <div class="field">
         <label for="<?php echo $titleField->getId(); ?>">Title</label>
         <input type="text" name="<?php echo $titleField->getFullName(); ?>" id="<?php echo $titleField->getId(); ?>" value="<?php echo $titleField->getValue(); ?>" />
+        <?php if (!$titleField->isValid()): ?>
+        <ul style="color:red;">
+        <?php foreach ($titleField->getErrors() as $error): ?>
+            <li><?php echo $error; ?></li>
+        <?php endforeach; ?>
+        </ul>
+        <?php endif; ?>
     </div>
 
     <button type="submit">Save</button>

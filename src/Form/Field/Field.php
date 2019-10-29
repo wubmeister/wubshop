@@ -7,7 +7,7 @@ class Field
     protected $name;
     protected $value;
     protected $isArray;
-    protected $required;
+    protected $required = false;
     protected $parent;
     protected $valid = true;
     protected $errors = [];
@@ -17,7 +17,7 @@ class Field
     {
         $this->name = $name;
         if (isset($options["is_array"])) $this->isArray = (bool)$options["is_array"];
-        if (isset($options["required"])) $this->isArray = (bool)$options["required"];
+        if (isset($options["required"])) $this->required = (bool)$options["required"];
     }
 
     public function getName()
@@ -43,7 +43,7 @@ class Field
 
     protected function filter()
     {
-        if ($this->required && empty($value)) {
+        if ($this->required && empty($this->value)) {
             $this->errors[] = "This field is required";
             $this->valid = false;
             return;
@@ -59,6 +59,20 @@ class Field
             }
         }
         $this->value = $value;
+    }
+
+    public function isValid()
+    {
+        if ($this->valid && $this->required && empty($this->value)) {
+            $this->errors[] = "This field is required";
+            $this->valid = false;
+        }
+        return $this->valid;
+    }
+
+    public function getErrors()
+    {
+        return $this->errors;
     }
 
     public function getFullName()

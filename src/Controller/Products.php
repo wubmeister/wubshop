@@ -109,14 +109,16 @@ class Products
     public function create()
     {
         $form = new Form();
-        $form->addField(new Field("title"));
+        $form->addField(new Field("title", [ "required" => true ]));
 
         if ($this->request->getMethod() == "POST") {
             $post = $this->request->getParsedBody();
-            $form->setValues($post);
-            $values = $form->getValues();
-            $id = $this->table->insert($values);
-            return new RedirectResponse("/products/{$id}");
+            $form->setValues($post, true);
+            if ($form->isValid()) {
+                $values = $form->getValues();
+                $id = $this->table->insert($values);
+                return new RedirectResponse("/products/{$id}");
+            }
         }
 
         $view = new View(Template::find("products/add"));
@@ -141,15 +143,17 @@ class Products
         }
 
         $form = new Form();
-        $form->addField(new Field("title"));
+        $form->addField(new Field("title", [ "required" => true ]));
         $form->setValues($product->toArray());
 
         if ($this->request->getMethod() == "POST") {
             $post = $this->request->getParsedBody();
-            $form->setValues($post);
-            $values = $form->getValues();
-            $this->table->update($values, [ "id" => $id ]);
-            return new RedirectResponse("/products/{$id}");
+            $form->setValues($post, true);
+            if ($form->isValid()) {
+                $values = $form->getValues();
+                $this->table->update($values, [ "id" => $id ]);
+                return new RedirectResponse("/products/{$id}");
+            }
         }
 
         $view = new View(Template::find("products/edit"));
