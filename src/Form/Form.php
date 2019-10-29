@@ -48,4 +48,28 @@ class Form
     {
         return isset($this->fields[$name]) ? $this->fields[$name] : null;
     }
+
+    public function isValid()
+    {
+        $valid = true;
+        foreach ($this->fields as $field) {
+            if (!$field->isValid()) {
+                $valid = false;
+                break;
+            }
+        }
+        return $valid;
+    }
+
+    public function getErrors()
+    {
+        $errors = [];
+        foreach ($this->fields as $name => $field) {
+            $errors = $field->getErrors();
+            if (!empty($errors)) {
+                $errors[$name] = $errors;
+            }
+        }
+        return $errors;
+    }
 }

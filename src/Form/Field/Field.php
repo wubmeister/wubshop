@@ -11,6 +11,7 @@ class Field
     protected $parent;
     protected $valid = true;
     protected $errors = [];
+    protected $inputFilters = [];
 
     public function __construct($name, array $options = [])
     {
@@ -27,6 +28,7 @@ class Field
     public function setValue($value, $filter = false)
     {
         $this->value = $value;
+        if ($filter) $this->filter();
     }
 
     public function getValue()
