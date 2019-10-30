@@ -52,6 +52,28 @@ class Schema
         return $stmt;
     }
 
+    protected function logChange($action, $tableName, $rowId = null, $changes = null)
+    {
+        if (substr($tableName, 0, 3) == "s_") return;
+
+        $sql = "INSERT INTO s_change (created, table_name, row_id, action) VALUES (?, ?, ?, ?)";
+        $this->execute($sql, [
+            date('Y-m-d H:i:s'),
+            $tableName,
+            $rowId,
+            $action
+        ]);
+        if ($changes) {
+            $changeId = $this->connection->lastInsertId();
+            $sql = "INSERT INTO s_change_data (change_id, is_compressed, changes) VALUES (?, ?, ?)";
+            $this->execute($sql, [
+                $changeId,
+                0,
+                json_encode($changes)
+            ]);
+        }
+    }
+
     public function insert(string $tableName, array $data)
     {
         $keys = array_keys($data);
@@ -61,23 +83,53 @@ class Schema
             implode(", ", array_fill(0, count($keys), '?')) .
             ")";
         $this->execute($sql, array_values($data));
-        return $this->connection->lastInsertId();
+        $rowId = $this->connection->lastInsertId();
+        if ($rowId) {
+            $this->logChange("insert", $tableName, $rowId, $data);
+        }
     }
 
     public function update(string $tableName, array $data, $where)
     {
-        $keys = array_keys($data);
-        $sql = "UPDATE {$tableName} SET " . implode(' = ?, ', $keys) . " = ?";
         $query = Query::factory($where);
-        $sql .= $query->getSql();
-        $this->execute($sql, array_merge(array_values($data), $query->getBindValues()));
+        $rows = $this->fetchAll("SELECT * FROM {$tableName}" . $query->getSql(), $query->getBindValues());
+        if (count($rows)) {
+            $keys = array_keys($data);
+            $sql = "UPDATE {$tableName} SET " . implode(' = ?, ', $keys) . " = ?";
+            $sql .= $query->getSql();
+            $this->execute($sql, array_merge(array_values($data), $query->getBindValues()));
+
+            if (substr($tableName, 0, 3) != "s_") {
+                foreach ($rows as $row) {
+                    if (isset($row["id"])) {
+                        $changes = [];
+                        foreach ($data as $key => $value) {
+                            if ($key == "modified") continue;
+                            if ($row[$key] != $value) $changes[$key] = $value;
+                        }
+                        if (count($changes) > 0) {
+                            $this->logChange("update", $tableName, $row["id"], $changes);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public function delete(string $tableName, $where)
     {
         $query = Query::factory($where);
-        $sql = "DELETE FROM {$tableName}" . $query->getSql();
-        $this->execute($sql, $query->getBindValues());
+        $rows = $this->fetchAll("SELECT * FROM {$tableName}" . $query->getSql(), $query->getBindValues());
+        if (count($rows)) {
+            $sql = "DELETE FROM {$tableName}" . $query->getSql();
+            $this->execute($sql, $query->getBindValues());
+
+            foreach ($rows as $row) {
+                if (isset($row["id"])) {
+                    $this->logChange("delete", $tableName, $row["id"]);
+                }
+            }
+        }
     }
 
     public function fetchAll($sql, $bindValues)
