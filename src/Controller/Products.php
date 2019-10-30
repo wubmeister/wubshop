@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Db\Connection;
+use App\Db\Schema;
 use App\Form\Field\Field;
 use App\Form\Form;
 use App\HttpException;
@@ -18,9 +18,9 @@ class Products
     protected $layout;
     protected $request;
 
-    public function __construct(Connection $dbConnection)
+    public function __construct(Schema $schema)
     {
-        $this->table = $dbConnection->schema("webshop")->table("product");
+        $this->table = $schema->table("product");
     }
 
     public function __invoke(ServerRequestInterface $request)

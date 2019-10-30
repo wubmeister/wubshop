@@ -3,7 +3,6 @@
 namespace App\Db;
 
 use Iterator;
-use Exception;
 
 class ResultSet implements Iterator
 {
@@ -94,20 +93,7 @@ class ResultSet implements Iterator
             $sql .= " LIMIT {$this->offsetValue}, 100000000";
         }
 
-        $db = $this->table->getSchema()->getConnection();
-        $stmt = $db->prepare($sql);
-        if (!$stmt) {
-            $err = $db->errorInfo();
-            throw new Exception("Prepare error: {$err[2]}");
-        }
-        foreach ($query->getBindValues() as $index => $value) {
-            $stmt->bindValue($index + 1, $value);
-        }
-        if (!$stmt->execute()) {
-            $err = $stmt->errorInfo();
-            throw new Exception("Execute error: {$err[2]}");
-        }
-        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $rows = $this->table->getSchema()->fetchAll($sql, $query->getBindValues());
         $this->rows = [];
         foreach ($rows as $row) {
             $this->rows[] = new Row($this->table, $row, true);

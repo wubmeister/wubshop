@@ -52,7 +52,7 @@ try {
 
         unset($session->hello);
 
-        $controller = new $controllerClass($connection);
+        $controller = new $controllerClass($connection->schema("webshop"));
         $response = $controller($request);
 
     }

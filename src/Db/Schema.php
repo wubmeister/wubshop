@@ -30,74 +30,7 @@ class Schema
         return $this->tables[$name];
     }
 
-    public function insert(string $tableName, array $data)
-    {
-        $keys = array_keys($data);
-        $sql = "INSERT INTO {$tableName} (" .
-            implode(', ', $keys) .
-            ") VALUES (" .
-            implode(", ", array_fill(0, count($keys), '?')) .
-            ")";
-        $stmt = $this->connection->prepare($sql);
-        if (!$stmt) {
-            $err = $this->connection->errorInfo;
-            throw new Exception("Prepare error: {$err[2]}");
-        }
-        foreach ($keys as $index => $key) {
-            $stmt->bindValue($index + 1, $data[$key]);
-        }
-        if (!$stmt->execute()) {
-            $err = $stmt->errorInfo();
-            throw new Exception("Execute error: {$err[2]}");
-        }
-        return $this->connection->lastInsertId();
-    }
-
-    public function update(string $tableName, array $data, $where)
-    {
-        $keys = array_keys($data);
-        $sql = "UPDATE {$tableName} SET " . implode(' = ?, ', $keys) . " = ?";
-        $query = Query::factory($where);
-        $sql .= $query->getSql();
-
-        $stmt = $this->connection->prepare($sql);
-        if (!$stmt) {
-            $err = $this->connection->errorInfo;
-            throw new Exception("Prepare error: {$err[2]}");
-        }
-        foreach ($keys as $index => $key) {
-            $stmt->bindValue($index + 1, $data[$key]);
-        }
-        $offset = count($keys) + 1;
-        foreach ($query->getBindValues() as $index => $value) {
-            $stmt->bindValue($offset + $index, $value);
-        }
-        if (!$stmt->execute()) {
-            $err = $stmt->errorInfo();
-            throw new Exception("Execute error: {$err[2]}");
-        }
-    }
-
-    public function delete(string $tableName, $where)
-    {
-        $query = Query::factory($where);
-        $sql = "DELETE FROM {$tableName}" . $query->getSql();
-
-        $stmt = $this->connection->prepare($sql);
-        if (!$stmt) {
-            $err = $this->connection->errorInfo;
-            throw new Exception("Prepare error: {$err[2]}");
-        }
-        foreach ($query->getBindValues() as $index => $value) {
-            $stmt->bindValue($index + 1, $value);
-        }
-        if (!$stmt->execute()) {
-            $err = $stmt->errorInfo();
-            throw new Exception("Execute error: {$err[2]}");
-        }
-    }
-
-    public function fetchAll($sql, $bindValues)
+    protected function execute($sql, $bindValues)
     {
         $stmt = $this->connection->prepare($sql);
         if (!$stmt) {
@@ -115,6 +48,41 @@ class Schema
             $err = $stmt->errorInfo();
             throw new Exception("Execute error: {$err[2]}");
         }
+
+        return $stmt;
+    }
+
+    public function insert(string $tableName, array $data)
+    {
+        $keys = array_keys($data);
+        $sql = "INSERT INTO {$tableName} (" .
+            implode(', ', $keys) .
+            ") VALUES (" .
+            implode(", ", array_fill(0, count($keys), '?')) .
+            ")";
+        $this->execute($sql, array_values($data));
+        return $this->connection->lastInsertId();
+    }
+
+    public function update(string $tableName, array $data, $where)
+    {
+        $keys = array_keys($data);
+        $sql = "UPDATE {$tableName} SET " . implode(' = ?, ', $keys) . " = ?";
+        $query = Query::factory($where);
+        $sql .= $query->getSql();
+        $this->execute($sql, array_merge(array_values($data), $query->getBindValues()));
+    }
+
+    public function delete(string $tableName, $where)
+    {
+        $query = Query::factory($where);
+        $sql = "DELETE FROM {$tableName}" . $query->getSql();
+        $this->execute($sql, $query->getBindValues());
+    }
+
+    public function fetchAll($sql, $bindValues)
+    {
+        $stmt = $this->execute($sql, $bindValues);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }
