@@ -96,4 +96,25 @@ class Schema
             throw new Exception("Execute error: {$err[2]}");
         }
     }
+
+    public function fetchAll($sql, $bindValues)
+    {
+        $stmt = $this->connection->prepare($sql);
+        if (!$stmt) {
+            $err = $this->connection->errorInfo();
+            throw new Exception("Prepare error: {$err[2]}");
+        }
+        foreach ($bindValues as $index => $value) {
+            if (is_int($index)) {
+                $stmt->bindValue($index + 1, $value);
+            } else {
+                $stmt->bindValue($index, $value);
+            }
+        }
+        if (!$stmt->execute()) {
+            $err = $stmt->errorInfo();
+            throw new Exception("Execute error: {$err[2]}");
+        }
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }
