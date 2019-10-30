@@ -10,6 +10,7 @@ class Field
     protected $required = false;
     protected $parent;
     protected $valid = true;
+    protected $changed = false;
     protected $errors = [];
     protected $inputFilters = [];
 
@@ -28,6 +29,7 @@ class Field
     public function setValue($value, $filter = false)
     {
         $this->value = $value;
+        $this->changed = true;
         if ($filter) $this->filter();
     }
 
@@ -63,7 +65,7 @@ class Field
 
     public function isValid()
     {
-        if ($this->valid && $this->required && empty($this->value)) {
+        if ($this->valid && $this->changed && $this->required && empty($this->value)) {
             $this->errors[] = "This field is required";
             $this->valid = false;
         }
