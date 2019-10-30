@@ -50,8 +50,6 @@ try {
         $connection = new Connection($config["db"]["driver"], $config["db"]["config"]);
         $session = new Session($connection->schema("webshop"));
 
-        unset($session->hello);
-
         $controller = new $controllerClass($connection->schema("webshop"));
         $response = $controller($request);
 
