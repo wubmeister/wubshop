@@ -101,68 +101,68 @@ class Products
         return new HtmlResponse($this->layout->render());
     }
 
+    public function createOrUpdate($id = null)
+    {
+        $purpose = "add";
+        $product = null;
+
+        if ($id) {
+            $product = $this->table->findOne([ "id" => (int)$id ]);
+
+            if (!$product) {
+                throw new HttpException(404);
+            }
+
+            $purpose = "edit";
+        }
+
+        $form = $this->getForm($purpose);
+        if ($product) {
+            $form->setValues($product->toArray());
+        }
+
+        if ($this->request->getMethod() == "POST") {
+            $post = $this->request->getParsedBody();
+            $form->setValues($post, true);
+            if ($form->isValid()) {
+                $values = $form->getValues();
+                if ($purpose == "add") {
+                    $id = $this->table->insert($values);
+                } else {
+                    $this->table->update($values, [ "id" => $id ]);
+                }
+                return new RedirectResponse("/products/{$id}");
+            }
+        }
+
+        $view = new View(Template::find("products/{$purpose}"));
+
+        $view->assign("form", $form);
+        $view->assign("product", $product);
+        $view->assign("purpose", $purpose);
+
+        $this->layout->assign("content", $view);
+        return new HtmlResponse($this->layout->render());
+    }
+
     public function add()
     {
-        return $this->create();
+        return $this->createOrUpdate();
     }
 
     public function create()
     {
-        $form = new Form();
-        $form->addField(new Field("title", [ "required" => true ]));
-
-        if ($this->request->getMethod() == "POST") {
-            $post = $this->request->getParsedBody();
-            $form->setValues($post, true);
-            if ($form->isValid()) {
-                $values = $form->getValues();
-                $id = $this->table->insert($values);
-                return new RedirectResponse("/products/{$id}");
-            }
-        }
-
-        $view = new View(Template::find("products/add"));
-
-        $view->assign("form", $form);
-
-        $this->layout->assign("content", $view);
-        return new HtmlResponse($this->layout->render());
+        return $this->createOrUpdate();
     }
 
     public function edit($id)
     {
-        return $this->update($id);
+        return $this->createOrUpdate($id);
     }
 
     public function update($id)
     {
-        $product = $this->table->findOne([ "id" => (int)$id ]);
-
-        if (!$product) {
-            throw new HttpException(404);
-        }
-
-        $form = new Form();
-        $form->addField(new Field("title", [ "required" => true ]));
-        $form->setValues($product->toArray());
-
-        if ($this->request->getMethod() == "POST") {
-            $post = $this->request->getParsedBody();
-            $form->setValues($post, true);
-            if ($form->isValid()) {
-                $values = $form->getValues();
-                $this->table->update($values, [ "id" => $id ]);
-                return new RedirectResponse("/products/{$id}");
-            }
-        }
-
-        $view = new View(Template::find("products/edit"));
-
-        $view->assign("product", $product);
-        $view->assign("form", $form);
-
-        $this->layout->assign("content", $view);
-        return new HtmlResponse($this->layout->render());
+        return $this->createOrUpdate($id);
     }
 
     public function delete($id)
@@ -187,5 +187,13 @@ class Products
 
         $this->layout->assign("content", $view);
         return new HtmlResponse($this->layout->render());
+    }
+
+    protected function getForm($purpose)
+    {
+        $form = new Form();
+        $form->addField(new Field("title", [ "required" => true ]));
+
+        return $form;
     }
 }
