@@ -4,11 +4,16 @@ namespace App\View\Helper;
 
 class Form
 {
+    public function label($field, $label)
+    {
+        echo '<label for="' . $field->getId() . '">' . $label . '</label>' . PHP_EOL;
+    }
+
     public function textField($field, $label = null)
     {
         echo '<div class="field">' . PHP_EOL;
         if ($label) {
-            echo '<label for="' . $field->getId() . '">' . $label . '</label>' . PHP_EOL;
+            $this->label($field, $label);
         }
         echo '<input type="text" name="' . $field->getFullName() . '" id="' . $field->getId() . '" value="' . $field->getValue() . '" />' . PHP_EOL;
         if (!$field->isValid()) {
@@ -25,7 +30,7 @@ class Form
     {
         echo '<div class="field">' . PHP_EOL;
         if ($label) {
-            echo '<label for="' . $field->getId() . '">' . $label . '</label>' . PHP_EOL;
+            $this->label($field, $label);
         }
         echo '<select name="' . $field->getFullName() . '" id="' . $field->getId() . '" value="' . $field->getValue() . '">' . PHP_EOL;
         foreach ($field->getOptions() as $key => $value) {

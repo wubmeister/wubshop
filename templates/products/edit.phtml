@@ -2,10 +2,28 @@
 
 <form method="post" action="/products/edit/<?php echo $item->id; ?>">
 
-    <?php $helper->form->textField($form->getField("title"), "Title"); ?>
-    <?php $helper->form->select($form->getField("product_type_id"), "Type"); ?>
-    <?php $helper->form->textField($form->getField("sku"), "SKU"); ?>
-    <?php $helper->form->textField($form->getField("gtin"), "GTIN"); ?>
+    <table>
+        <tr>
+            <td><?php $helper->form->label($form->getField("title"), "Title"); ?></td>
+            <td><?php $helper->form->textField($form->getField("title")); ?></td>
+        </tr>
+        <tr>
+            <td><?php $helper->form->label($form->getField("product_type_id"), "Type"); ?></td>
+            <td><?php $helper->form->select($form->getField("product_type_id")); ?></td>
+        </tr>
+        <tr>
+            <td><?php $helper->form->label($form->getField("base_price"), "Base price"); ?></td>
+            <td><?php $helper->form->textField($form->getField("base_price")); ?></td>
+        </tr>
+        <tr>
+            <td><?php $helper->form->label($form->getField("sku"), "SKU"); ?></td>
+            <td><?php $helper->form->textField($form->getField("sku")); ?></td>
+        </tr>
+        <tr>
+            <td><?php $helper->form->label($form->getField("gtin"), "GTIN"); ?></td>
+            <td><?php $helper->form->textField($form->getField("gtin")); ?></td>
+        </tr>
+    </table>
 
     <button type="submit">Save</button>
     <button type="button" onclick="history.back()">Cancel</button>

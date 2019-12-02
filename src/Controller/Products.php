@@ -37,6 +37,7 @@ class Products extends Crud
         $form = new Form();
         $form->addField(new Field("title", [ "required" => true ]));
         $form->addField(new Options("product_type_id", [ "options" => $types ]));
+        $form->addField(new Field("base_price"));
         $form->addField(new Field("sku"));
         $form->addField(new Field("gtin"));
 
