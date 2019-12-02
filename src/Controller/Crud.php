@@ -174,6 +174,9 @@ abstract class Crud
                 $this->table->delete([ "id" => $id ]);
                 return new RedirectResponse("{$this->baseRoute}");
             }
+        } else if ($this->request->getMethod() == "DELETE") {
+            $this->table->delete([ "id" => $id ]);
+            return new RedirectResponse("{$this->baseRoute}");
         }
 
         $view = new View(Template::find("{$this->templatePath}/delete"));
