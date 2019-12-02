@@ -1,0 +1,10 @@
+<h2>Add a product type</h2>
+
+<form method="post" action="/product-types/add">
+
+    <?php $helper->form->textField($form->getField("name"), "Name"); ?>
+
+    <button type="submit">Save</button>
+    <button type="button" onclick="history.back()">Cancel</button>
+
+</form>

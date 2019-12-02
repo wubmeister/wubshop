@@ -3,6 +3,7 @@
 <form method="post" action="/products/edit/<?php echo $item->id; ?>">
 
     <?php $helper->form->textField($form->getField("title"), "Title"); ?>
+    <?php $helper->form->select($form->getField("product_type_id"), "Type"); ?>
     <?php $helper->form->textField($form->getField("sku"), "SKU"); ?>
     <?php $helper->form->textField($form->getField("gtin"), "GTIN"); ?>
 

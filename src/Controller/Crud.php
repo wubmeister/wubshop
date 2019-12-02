@@ -13,6 +13,7 @@ abstract class Crud
 {
     protected $table;
     protected $layout;
+    protected $view;
     protected $request;
 
     protected $templatePath = "crud";
@@ -71,11 +72,11 @@ abstract class Crud
     {
         $items = $this->table->find();
 
-        $view = new View(Template::find("{$this->templatePath}/index"));
+        $this->view = new View(Template::find("{$this->templatePath}/index"));
 
-        $view->assign("items", $items);
+        $this->view->assign("items", $items);
 
-        $this->layout->assign("content", $view);
+        $this->layout->assign("content", $this->view);
 
         return new HtmlResponse($this->layout->render());
     }
@@ -88,11 +89,13 @@ abstract class Crud
             throw new HttpException(404);
         }
 
-        $view = new View(Template::find("{$this->templatePath}/show"));
+        $this->parseItemForShow($item);
 
-        $view->assign("item", $item);
+        $this->view = new View(Template::find("{$this->templatePath}/show"));
 
-        $this->layout->assign("content", $view);
+        $this->view->assign("item", $item);
+
+        $this->layout->assign("content", $this->view);
         return new HtmlResponse($this->layout->render());
     }
 
@@ -130,13 +133,13 @@ abstract class Crud
             }
         }
 
-        $view = new View(Template::find("{$this->templatePath}/{$purpose}"));
+        $this->view = new View(Template::find("{$this->templatePath}/{$purpose}"));
 
-        $view->assign("form", $form);
-        $view->assign("item", $item);
-        $view->assign("purpose", $purpose);
+        $this->view->assign("form", $form);
+        $this->view->assign("item", $item);
+        $this->view->assign("purpose", $purpose);
 
-        $this->layout->assign("content", $view);
+        $this->layout->assign("content", $this->view);
         return new HtmlResponse($this->layout->render());
     }
 
@@ -179,13 +182,15 @@ abstract class Crud
             return new RedirectResponse("{$this->baseRoute}");
         }
 
-        $view = new View(Template::find("{$this->templatePath}/delete"));
+        $this->view = new View(Template::find("{$this->templatePath}/delete"));
 
-        $view->assign("item", $item);
+        $this->view->assign("item", $item);
 
-        $this->layout->assign("content", $view);
+        $this->layout->assign("content", $this->view);
         return new HtmlResponse($this->layout->render());
     }
 
     abstract protected function getForm($purpose);
+
+    protected function parseItemForShow($item){}
 }

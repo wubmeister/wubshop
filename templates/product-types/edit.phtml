@@ -1,0 +1,10 @@
+<h2>Edit product type</h2>
+
+<form method="post" action="/product-types/edit/<?php echo $item->id; ?>">
+
+    <?php $helper->form->textField($form->getField("name"), "Name"); ?>
+
+    <button type="submit">Save</button>
+    <button type="button" onclick="history.back()">Cancel</button>
+
+</form>

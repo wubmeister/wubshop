@@ -2,6 +2,7 @@
 
 use App\Db\Connection;
 use App\Controller\Products;
+use App\Controller\ProductTypes;
 use App\HttpException;
 use App\Router\Router;
 use App\Session\Session;
@@ -30,7 +31,10 @@ $router = new Router([
     ],
     "products" => [
         "handler" => Products::class
-    ]
+    ],
+    "product-types" => [
+        "handler" => ProductTypes::class
+    ],
 ]);
 
 $route = $router->resolve($request->getMethod(), $request->getUri()->getPath());

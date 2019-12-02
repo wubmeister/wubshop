@@ -12,6 +12,7 @@ class ResultSet implements Iterator
     protected $limitValue;
     protected $offsetValue;
     protected $orderBy;
+    protected $links = [];
 
     protected $pages;
     protected $rows;
@@ -53,6 +54,18 @@ class ResultSet implements Iterator
         $this->limitValue = $limit;
     }
 
+    public function link($table, $cond)
+    {
+        $conditions = [];
+        $srcTable = $this->table->getName();
+        foreach ($cond as $linked => $src) {
+            $conditions[] = "{$table}.{$linked} = {$srcTable}.{$src}";
+        }
+        $this->links[] = [ "table" => $table, "cond" => implode(" AND ", $conditions) ];
+
+        return $this;
+    }
+
     public function paginate($page, $itemsPerPage)
     {
         // $countSql = "...";
@@ -69,7 +82,13 @@ class ResultSet implements Iterator
     protected function fetch()
     {
         $query = Query::factory($this->query);
-        $sql = "SELECT * FROM {$this->table->getName()} " . $query->getSql();
+        $sql = "SELECT * FROM {$this->table->getName()} ";
+
+        foreach ($this->links as $link) {
+            $sql .= " LEFT JOIN {$link['table']} ON {$link['cond']}";
+        }
+
+        $sql .= $query->getSql();
 
         if ($this->orderBy) {
             $orders = [];
@@ -105,6 +124,15 @@ class ResultSet implements Iterator
     {
         $this->fetchAll();
         return $this->rows;
+    }
+
+    public function getOptions($labelColumn = "name", $valueColumn = "id")
+    {
+        $options = [];
+        foreach ($this as $row) {
+            $options[$row->$valueColumn] = $row->$labelColumn;
+        }
+        return $options;
     }
 
     public function getPagination()

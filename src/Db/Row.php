@@ -48,4 +48,17 @@ class Row
     {
         return $this->data;
     }
+
+    public function link($table, $cond, $property = null)
+    {
+        if (!$property) $property = $table;
+
+        foreach ($cond as $key => $col) {
+            $cond[$key] = $this->data[$col];
+        }
+
+        $this->$property = $this->table->getSchema()->table($table)->findOne($cond);
+
+        return $this;
+    }
 }
