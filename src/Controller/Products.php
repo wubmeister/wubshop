@@ -193,6 +193,8 @@ class Products
     {
         $form = new Form();
         $form->addField(new Field("title", [ "required" => true ]));
+        $form->addField(new Field("sku"));
+        $form->addField(new Field("gtin"));
 
         return $form;
     }

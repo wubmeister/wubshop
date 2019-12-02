@@ -14,6 +14,7 @@ class Renderer
     public function render($file)
     {
         extract($this->vars);
+        $helper = new Helper();
         ob_start();
         include $file;
         $content = ob_get_clean();
