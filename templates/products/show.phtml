@@ -1,14 +1,14 @@
 <h2>Product</h2>
 
 <p>
-    Title: <?php echo $product->title; ?><br/>
-    SKU: <?php echo $product->sku; ?><br/>
-    GTIN: <?php echo $product->gtin; ?>
+    Title: <?php echo $item->title; ?><br/>
+    SKU: <?php echo $item->sku; ?><br/>
+    GTIN: <?php echo $item->gtin; ?>
 </p>
 
 <p>
-    <a href="/products/<?php echo $product->id; ?>/edit">Edit</a>
+    <a href="/products/<?php echo $item->id; ?>/edit">Edit</a>
     &middot;
-    <a href="/products/<?php echo $product->id; ?>/delete">Delete</a>
+    <a href="/products/<?php echo $item->id; ?>/delete">Delete</a>
 </p>
 <p><a href="/products">Back to index</a></p>

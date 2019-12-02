@@ -1,6 +1,6 @@
 <h2>Edit product</h2>
 
-<form method="post" action="/products/edit/<?php echo $product->id; ?>">
+<form method="post" action="/products/edit/<?php echo $item->id; ?>">
 
     <?php $helper->form->textField($form->getField("title"), "Title"); ?>
     <?php $helper->form->textField($form->getField("sku"), "SKU"); ?>
