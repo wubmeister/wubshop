@@ -1,0 +1,23 @@
+<h2>Language</h2>
+
+<table>
+    <tr>
+        <td>Name</td>
+        <td><?php echo $item->name; ?></td>
+    </tr>
+    <tr>
+        <td>Localized name</td>
+        <td><?php echo $item->localized_name; ?></td>
+    </tr>
+    <tr>
+        <td>Language code</td>
+        <td><?php echo $item->lang_code; ?></td>
+    </tr>
+</table>
+
+<p>
+    <a href="/languages/<?php echo $item->id; ?>/edit">Edit</a>
+    &middot;
+    <a href="/languages/<?php echo $item->id; ?>/delete">Delete</a>
+</p>
+<p><a href="/languages">Back to index</a></p>

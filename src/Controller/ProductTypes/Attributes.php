@@ -38,9 +38,6 @@ class Attributes extends Crud
 
     protected function getForm($purpose)
     {
-        $typesTable = $this->table->getSchema()->table("product_type");
-        $types = $typesTable->find()->getOptions();
-
         $form = new Form();
         $form->addField(new Field("name", [ "required" => true ]));
         $form->addField(new Options("data_type", [ "options" => [

@@ -1,0 +1,23 @@
+<h2>Add a language</h2>
+
+<form method="post" action="/languages/add">
+
+    <table>
+        <tr>
+            <td><?php $helper->form->label($form->getField("name"), "Name"); ?></td>
+            <td><?php $helper->form->textField($form->getField("name")); ?></td>
+        </tr>
+        <tr>
+            <td><?php $helper->form->label($form->getField("localized_name"), "Localized name"); ?></td>
+            <td><?php $helper->form->textField($form->getField("localized_name")); ?></td>
+        </tr>
+        <tr>
+            <td><?php $helper->form->label($form->getField("lang_code"), "Language code"); ?></td>
+            <td><?php $helper->form->textField($form->getField("lang_code")); ?></td>
+        </tr>
+    </table>
+
+    <button type="submit">Save</button>
+    <button type="button" onclick="history.back()">Cancel</button>
+
+</form>

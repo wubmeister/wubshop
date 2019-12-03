@@ -1,0 +1,15 @@
+<h2>Edit channel</h2>
+
+<form method="post" action="/channels/edit/<?php echo $item->id; ?>">
+
+    <table>
+        <tr>
+            <td><?php $helper->form->label($form->getField("name"), "Name"); ?></td>
+            <td><?php $helper->form->textField($form->getField("name")); ?></td>
+        </tr>
+    </table>
+
+    <button type="submit">Save</button>
+    <button type="button" onclick="history.back()">Cancel</button>
+
+</form>

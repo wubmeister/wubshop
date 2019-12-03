@@ -1,0 +1,22 @@
+<h2>Languages</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Language</th>
+            <th>Localized name</th>
+            <th>Language code</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($items as $language): ?>
+        <tr>
+            <td><a href="/languages/<?php echo $language->id; ?>"><?php echo $language->name; ?></a></td>
+            <td><?php echo $language->localized_name; ?></td>
+            <td><?php echo $language->lang_code; ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<p><a href="/languages/add">Add language</a></p>

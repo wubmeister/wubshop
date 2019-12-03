@@ -1,0 +1,18 @@
+<h2>Channels</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Channel</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($items as $channel): ?>
+        <tr>
+            <td><a href="/channels/<?php echo $channel->id; ?>"><?php echo $channel->name; ?></a></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<p><a href="/channels/add">Add channel</a></p>

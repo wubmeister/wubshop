@@ -6,9 +6,6 @@ use App\Db\Schema;
 use App\Form\Field\Field;
 use App\Form\Field\Options;
 use App\Form\Form;
-use App\Template;
-use App\View\View;
-use Zend\Diactoros\Response\HtmlResponse;
 
 class Products extends Crud
 {

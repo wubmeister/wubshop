@@ -1,9 +1,6 @@
 <?php
 
 use App\Db\Connection;
-use App\Controller\Products;
-use App\Controller\ProductTypes;
-use App\Controller\ProductTypes\Attributes;
 use App\HttpException;
 use App\Router\Router;
 use App\Session\Session;
@@ -12,7 +9,10 @@ use Zend\Diactoros\ServerRequest;
 
 require_once("../vendor/autoload.php");
 
-$config = include("../config/config.local.php");
+$config = array_merge(
+    include("../config/config.local.php"),
+    include("../config/config.global.php")
+);
 
 $request = new ServerRequest(
     $_SERVER,
@@ -26,22 +26,7 @@ $request = new ServerRequest(
     $_POST
 );
 
-$router = new Router([
-    "/" => [
-        "handler" => Products::class
-    ],
-    "products" => [
-        "handler" => Products::class
-    ],
-    "product-types" => [
-        "handler" => ProductTypes::class,
-        "children" => [
-            "attributes" => [
-                "handler" => Attributes::class
-            ]
-        ]
-    ],
-]);
+$router = new Router($config["router"]["routes"]);
 
 $route = $router->resolve($request->getMethod(), $request->getUri()->getPath());
 try {
