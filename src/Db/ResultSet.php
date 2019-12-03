@@ -13,6 +13,7 @@ class ResultSet implements Iterator
     protected $offsetValue;
     protected $orderBy;
     protected $links = [];
+    protected $filterLink = null;
 
     protected $pages;
     protected $rows;
@@ -66,6 +67,33 @@ class ResultSet implements Iterator
         return $this;
     }
 
+    public function filter($cond)
+    {
+        if (!$this->query) {
+            $this->query = $cond;
+        } else if (is_array($this->query)) {
+            $this->query = array_merge($this->query, $cond);
+        } else {
+            throw new \Exception("Cannot modify a Query object");
+        }
+
+        return $this;
+    }
+
+    public function filterLinked($table, $rightCol, $cond)
+    {
+        $conditions = [];
+        $srcTable = $this->table->getName();
+        $this->filterLink = [ "table" => $table, "cond" => "{$srcTable}.id = {$table}.{$rightCol}" ];
+        $conditions = [];
+        foreach ($cond as $key => $value) {
+            $conditions["{$table}.{$key}"] = $value;
+        }
+        $this->filter($conditions);
+
+        return $this;
+    }
+
     public function paginate($page, $itemsPerPage)
     {
         // $countSql = "...";
@@ -82,7 +110,13 @@ class ResultSet implements Iterator
     protected function fetch()
     {
         $query = Query::factory($this->query);
-        $sql = "SELECT * FROM {$this->table->getName()} ";
+        $sql = "SELECT *";
+
+        if ($this->filterLink) {
+            $sql .= " FROM {$this->filterLink['table']} LEFT JOIN {$this->table->getName()} ON {$this->filterLink['cond']}";
+        } else {
+            $sql .= " FROM {$this->table->getName()}";
+        }
 
         foreach ($this->links as $link) {
             $sql .= " LEFT JOIN {$link['table']} ON {$link['cond']}";
@@ -96,7 +130,7 @@ class ResultSet implements Iterator
                 if (is_numeric($key)) {
                     $orders[] = "{$value} ASC";
                 } else {
-                    $value = stroupper($value);
+                    $value = strtoupper($value);
                     $value = in_array($value, [ "ASC", "DESC" ]) ? $value : "ASC";
                     $orders[] = "{$key} {$value}";
                 }
@@ -122,7 +156,7 @@ class ResultSet implements Iterator
 
     public function getAll()
     {
-        $this->fetchAll();
+        $this->fetch();
         return $this->rows;
     }
 
@@ -137,7 +171,7 @@ class ResultSet implements Iterator
 
     public function getPagination()
     {
-        return new Pagination($this->rowCount, $this->page, $this->limit);
+        // return new Pagination($this->rowCount, $this->page, $this->limit);
     }
 
     public function rewind()

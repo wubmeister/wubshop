@@ -26,13 +26,13 @@ class Router
             }
         } else {
             foreach ($chunks as $index => $chunk) {
-                if ($key) {
-                    if ($chunk == "add" || $chunk == "edit" || $chunk == "delete") {
-                        $params["action"] = $chunk;
-                    } else {
-                        $params["id"] = $chunk;
-                        $params["ids"][$key] = $chunk;
-                    }
+                if ($chunk == "add" || $chunk == "edit" || $chunk == "delete") {
+                    $params["action"] = $chunk;
+                    $key = null;
+                } else if ($key) {
+                    $params["id"] = $chunk;
+                    $params["ids"][$key] = $chunk;
+                    $key = null;
                 } else if (isset($collection[$chunk])) {
                     $params["id"] = null;
                     $handler = $collection[$chunk]["handler"];
@@ -40,14 +40,15 @@ class Router
                     if (!isset($params["allowId"]) || $params["allowId"] == true) {
                         $key = $chunk;
                     }
-                    if (!$collection) {
-                        if (isset($params["allowTail"]) && $params["allowTail"] == true) {
-                            $params["tail"] = implode('/', array_slice($chunks, $index + 1));
-                        }
-                    }
                 } else {
                     return null;
                 }
+            }
+        }
+
+        if (!$collection && $index < count($chunks) - 1) {
+            if (isset($params["allowTail"]) && $params["allowTail"] == true) {
+                $params["tail"] = implode('/', array_slice($chunks, $index + 1));
             }
         }
 

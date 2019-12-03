@@ -3,6 +3,7 @@
 use App\Db\Connection;
 use App\Controller\Products;
 use App\Controller\ProductTypes;
+use App\Controller\ProductTypes\Attributes;
 use App\HttpException;
 use App\Router\Router;
 use App\Session\Session;
@@ -33,7 +34,12 @@ $router = new Router([
         "handler" => Products::class
     ],
     "product-types" => [
-        "handler" => ProductTypes::class
+        "handler" => ProductTypes::class,
+        "children" => [
+            "attributes" => [
+                "handler" => Attributes::class
+            ]
+        ]
     ],
 ]);
 

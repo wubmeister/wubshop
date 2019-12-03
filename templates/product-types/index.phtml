@@ -1,9 +1,18 @@
 <h2>Product types</h2>
 
-<ul>
-<?php foreach ($items as $type): ?>
-<li><a href="/product-types/<?php echo $type->id; ?>"><?php echo $type->name; ?></a></li>
-<?php endforeach; ?>
-</ul>
+<table>
+    <thead>
+        <tr>
+            <th>Product type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($items as $type): ?>
+        <tr>
+            <td><a href="/product-types/<?php echo $type->id; ?>"><?php echo $type->name; ?></a></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
 
 <p><a href="/product-types/add">Add product type</a></p>

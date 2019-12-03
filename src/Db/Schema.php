@@ -74,19 +74,23 @@ class Schema
         }
     }
 
-    public function insert(string $tableName, array $data)
+    public function insert(string $tableName, array $data, bool $ignore = false)
     {
         $keys = array_keys($data);
-        $sql = "INSERT INTO {$tableName} (" .
+        $ignoreStr = $ignore ? " IGNORE" : "";
+        $sql = "INSERT{$ignoreStr} INTO {$tableName} (" .
             implode(', ', $keys) .
             ") VALUES (" .
             implode(", ", array_fill(0, count($keys), '?')) .
             ")";
+
         $this->execute($sql, array_values($data));
         $rowId = $this->connection->lastInsertId();
         if ($rowId) {
             $this->logChange("insert", $tableName, $rowId, $data);
         }
+
+        return $rowId;
     }
 
     public function update(string $tableName, array $data, $where)

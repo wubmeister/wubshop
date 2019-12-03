@@ -40,6 +40,12 @@ class Table
         return $this->schema->insert($this->name, $data);
     }
 
+    public function insertIgnore($data)
+    {
+        $data["created"] = date("Y-m-d H:i:s");
+        return $this->schema->insert($this->name, $data, true);
+    }
+
     public function update($data, $where)
     {
         $data["modified"] = date("Y-m-d H:i:s");

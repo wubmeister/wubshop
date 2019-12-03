@@ -1,0 +1,26 @@
+<h2>Attributes for <?php echo $parentItem->name; ?></h2>
+
+<ul class="tabs">
+    <li><a href="/product-types/<?php echo $parentItem->id; ?>">Product type</a></li>
+    <li><a href="/product-types/<?php echo $parentItem->id; ?>/edit">Edit</a></li>
+    <li class="active"><a href="/product-types/<?php echo $parentItem->id; ?>/attributes">Attributes</a></li>
+</ul>
+
+<table>
+    <thead>
+        <tr>
+            <th>Attribute</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($items as $attribute): ?>
+        <tr>
+            <td><a href="/product-types/<?php echo $parentItem->id; ?>/attributes/<?php echo $attribute->id; ?>"><?php echo $attribute->name; ?></a></td>
+            <td><?php echo $attribute->data_type; ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<p><a href="/product-types/<?php echo $parentItem->id; ?>/attributes/add">Add attribute</a></p>

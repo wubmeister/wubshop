@@ -1,0 +1,27 @@
+<h2>Attribute</h2>
+
+<table>
+    <tr>
+        <td>Name</td>
+        <td><?php echo $item->name; ?></td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td><?php echo $item->data_type; ?></td>
+    </tr>
+    <tr>
+        <td>Is array</td>
+        <td><?php echo $item->is_array ? 'yes' : 'no'; ?></td>
+    </tr>
+    <tr>
+        <td>Units</td>
+        <td><?php echo $item->units; ?></td>
+    </tr>
+</table>
+
+<p>
+    <a href="/product-types/<?php echo $parentItem->id; ?>/attributes/<?php echo $item->id; ?>/edit">Edit</a>
+    &middot;
+    <a href="/product-types/<?php echo $parentItem->id; ?>/attributes/<?php echo $item->id; ?>/delete">Delete</a>
+</p>
+<p><a href="/product-types/<?php echo $parentItem->id; ?>/attributes">Back to index</a></p>

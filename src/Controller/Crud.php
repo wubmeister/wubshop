@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Controller\Feature\AbstractFeature;
 use App\HttpException;
+use App\MutableArray;
 use App\Template;
 use App\View\View;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,6 +17,7 @@ abstract class Crud
     protected $layout;
     protected $view;
     protected $request;
+    protected $features = [];
 
     protected $templatePath = "crud";
     protected $baseRoute = "/crud";
@@ -63,6 +66,12 @@ abstract class Crud
         return $this->$action();
     }
 
+    public function addFeature(string $name, AbstractFeature $feature)
+    {
+        $feature->setController($this);
+        $this->features[$name] = $feature;
+    }
+
     protected function isAllowed($action)
     {
         return true;
@@ -70,13 +79,16 @@ abstract class Crud
 
     public function index()
     {
-        $items = $this->table->find();
-
         $this->view = new View(Template::find("{$this->templatePath}/index"));
 
-        $this->view->assign("items", $items);
+        $items = $this->table->find();
 
+        $this->trigger("filterItemsForIndex", $items);
+
+        $this->view->assign("items", $items);
+        $this->trigger("beforeRender", $this->view);
         $this->layout->assign("content", $this->view);
+
 
         return new HtmlResponse($this->layout->render());
     }
@@ -94,8 +106,9 @@ abstract class Crud
         $this->view = new View(Template::find("{$this->templatePath}/show"));
 
         $this->view->assign("item", $item);
-
+        $this->trigger("beforeRender", $this->view);
         $this->layout->assign("content", $this->view);
+
         return new HtmlResponse($this->layout->render());
     }
 
@@ -123,11 +136,16 @@ abstract class Crud
             $post = $this->request->getParsedBody();
             $form->setValues($post, true);
             if ($form->isValid()) {
-                $values = $form->getValues();
+                $values = new MutableArray($form->getValues());
+                $this->trigger("filterValues", $values);
                 if ($purpose == "add") {
-                    $id = $this->table->insert($values);
+                    $id = $this->table->insert($values->getArrayCopy());
                 } else {
-                    $this->table->update($values, [ "id" => $id ]);
+                    $this->table->update($values->getArrayCopy(), [ "id" => $id ]);
+                }
+                if ($id) {
+                    $item = $this->table->findOne([ "id" => (int)$id ]);
+                    $this->trigger("afterSave", $item);
                 }
                 return new RedirectResponse("{$this->baseRoute}/{$id}");
             }
@@ -139,7 +157,9 @@ abstract class Crud
         $this->view->assign("item", $item);
         $this->view->assign("purpose", $purpose);
 
+        $this->trigger("beforeRender", $this->view);
         $this->layout->assign("content", $this->view);
+
         return new HtmlResponse($this->layout->render());
     }
 
@@ -185,12 +205,35 @@ abstract class Crud
         $this->view = new View(Template::find("{$this->templatePath}/delete"));
 
         $this->view->assign("item", $item);
+        $this->trigger("beforeRender", $this->view);
 
         $this->layout->assign("content", $this->view);
         return new HtmlResponse($this->layout->render());
     }
 
+    public function setLayoutVariable($name, $value)
+    {
+        $this->layout->assign($name, $value);
+    }
+
+    public function setViewVariable($name, $value)
+    {
+        $this->view->assign($name, $value);
+    }
+
     abstract protected function getForm($purpose);
 
+    protected function filterItemsForIndex($items){}
     protected function parseItemForShow($item){}
+    protected function filterValues($values){}
+    protected function afterSave($item){}
+    protected function beforeRender($view){}
+
+    protected function trigger($event, ...$args)
+    {
+        call_user_func_array([ $this, $event ], $args);
+        foreach ($this->features as $feature) {
+            call_user_func_array([ $feature, $event ], $args);
+        }
+    }
 }

@@ -1,0 +1,27 @@
+<h2>Add an attribute</h2>
+
+<form method="post" action="/product-types/<?php echo $parentItem->id; ?>/attributes/add">
+
+    <table>
+        <tr>
+            <td><?php $helper->form->label($form->getField("name"), "Name"); ?></td>
+            <td><?php $helper->form->textField($form->getField("name")); ?></td>
+        </tr>
+        <tr>
+            <td><?php $helper->form->label($form->getField("data_type"), "Type"); ?></td>
+            <td><?php $helper->form->select($form->getField("data_type")); ?></td>
+        </tr>
+        <tr>
+            <td><?php $helper->form->label($form->getField("is_array"), "Is array"); ?></td>
+            <td><?php $helper->form->checkbox($form->getField("is_array")); ?></td>
+        </tr>
+        <tr>
+            <td><?php $helper->form->label($form->getField("units"), "Units"); ?></td>
+            <td><?php $helper->form->textField($form->getField("units")); ?></td>
+        </tr>
+    </table>
+
+    <button type="submit">Save</button>
+    <button type="button" onclick="history.back()">Cancel</button>
+
+</form>

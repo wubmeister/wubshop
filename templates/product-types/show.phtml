@@ -1,8 +1,17 @@
 <h2>Product type</h2>
 
-<p>
-    Name: <?php echo $item->name; ?>
-</p>
+<ul class="tabs">
+    <li class="active"><a href="/product-types/<?php echo $item->id; ?>">Product type</a></li>
+    <li><a href="/product-types/<?php echo $item->id; ?>/edit">Edit</a></li>
+    <li><a href="/product-types/<?php echo $item->id; ?>/attributes">Attributes</a></li>
+</ul>
+
+<table>
+    <tr>
+        <td>Name</td>
+        <td><?php echo $item->name; ?></td>
+    </tr>
+</table>
 
 <p>
     <a href="/product-types/<?php echo $item->id; ?>/edit">Edit</a>

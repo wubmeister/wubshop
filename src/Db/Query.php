@@ -2,8 +2,6 @@
 
 namespace App\Db;
 
-use Exception;
-
 class Query
 {
     protected $sql;
