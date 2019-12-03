@@ -21,6 +21,11 @@ class Products extends Crud
         $this->table = $schema->table("product");
     }
 
+    protected function filterItemsForIndex($items)
+    {
+        $items->link("product_type", [ "id" => "product_type_id" ], [ "product_type" => "name" ]);
+    }
+
     protected function parseItemForShow($item)
     {
         $item->link("product_type", [ "id" => "product_type_id" ]);

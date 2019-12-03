@@ -44,6 +44,33 @@
             color: #000;
             border-bottom-color: #000;
         }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            border: none;
+        }
+        .table td, .table th {
+            padding: 8px 10px;
+        }
+        .table td:first-child, .table th:first-child {
+            padding-left: 0;
+        }
+        .table td:last-child, .table th:last-child {
+            padding-right: 0;
+        }
+        .table thead th {
+            text-align: left;
+            border-bottom: 2px solid #ebebeb;
+        }
+        .table tbody tr + tr td {
+            border-top: 1px solid #ebebeb;
+        }
+        .form.table td:first-child,
+        .detail.table td:first-child {
+            width: 120px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>

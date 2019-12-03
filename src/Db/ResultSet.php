@@ -14,6 +14,7 @@ class ResultSet implements Iterator
     protected $orderBy;
     protected $links = [];
     protected $filterLink = null;
+    protected $columns = [];
 
     protected $pages;
     protected $rows;
@@ -55,7 +56,7 @@ class ResultSet implements Iterator
         $this->limitValue = $limit;
     }
 
-    public function link($table, $cond)
+    public function link($table, $cond, $columns = null)
     {
         $conditions = [];
         $srcTable = $this->table->getName();
@@ -63,6 +64,18 @@ class ResultSet implements Iterator
             $conditions[] = "{$table}.{$linked} = {$srcTable}.{$src}";
         }
         $this->links[] = [ "table" => $table, "cond" => implode(" AND ", $conditions) ];
+
+        if ($columns) {
+            foreach ($columns as $key => $column) {
+                if (is_numeric($key)) {
+                    $this->columns[] = "{$table}.{$column}";
+                } else {
+                    $this->columns[] = "{$table}.{$column} AS {$key}";
+                }
+            }
+        } else {
+            $this->columns[] = "{$table}.*";
+        }
 
         return $this;
     }
@@ -80,7 +93,7 @@ class ResultSet implements Iterator
         return $this;
     }
 
-    public function filterLinked($table, $rightCol, $cond)
+    public function filterLinked($table, $rightCol, $cond, $columns = null)
     {
         $conditions = [];
         $srcTable = $this->table->getName();
@@ -90,6 +103,18 @@ class ResultSet implements Iterator
             $conditions["{$table}.{$key}"] = $value;
         }
         $this->filter($conditions);
+
+        if ($columns) {
+            foreach ($columns as $key => $column) {
+                if (is_numeric($key)) {
+                    $this->columns[] = "{$table}.{$column}";
+                } else {
+                    $this->columns[] = "{$table}.{$column} AS {$key}";
+                }
+            }
+        } else {
+            $this->columns[] = "{$table}.*";
+        }
 
         return $this;
     }
@@ -110,7 +135,11 @@ class ResultSet implements Iterator
     protected function fetch()
     {
         $query = Query::factory($this->query);
-        $sql = "SELECT *";
+        $sql = "SELECT {$this->table->getName()}.*";
+
+        if (count($this->columns)) {
+            $sql .= ", " . implode(", ", $this->columns);
+        }
 
         if ($this->filterLink) {
             $sql .= " FROM {$this->filterLink['table']} LEFT JOIN {$this->table->getName()} ON {$this->filterLink['cond']}";

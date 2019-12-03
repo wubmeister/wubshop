@@ -1,6 +1,6 @@
 <h2>Product index</h2>
 
-<table>
+<table class="index table">
     <thead>
         <tr>
             <th>Product</th>
@@ -14,7 +14,7 @@
         <?php foreach ($items as $product): ?>
         <tr>
             <td><a href="/products/<?php echo $product->id; ?>"><?php echo $product->title; ?></a></td>
-            <td><?php echo $product->product_type_id; ?></td>
+            <td><?php echo $product->product_type; ?></td>
             <td><?php echo $product->base_price; ?></td>
             <td><?php echo $product->sku; ?></td>
             <td><?php echo $product->gtin; ?></td>

@@ -2,7 +2,12 @@
 
 <form method="post" action="/product-types/add">
 
-    <?php $helper->form->textField($form->getField("name"), "Name"); ?>
+    <table class="form table">
+        <tr>
+            <td><?php $helper->form->label($form->getField("name"), "Name"); ?></td>
+            <td><?php $helper->form->textField($form->getField("name")); ?></td>
+        </tr>
+    </table>
 
     <button type="submit">Save</button>
     <button type="button" onclick="history.back()">Cancel</button>
