@@ -1,0 +1,27 @@
+<h2>Product variant</h2>
+
+<table class="detail table">
+    <tr>
+        <td>Title</td>
+        <td><?php echo $item->title; ?></td>
+    </tr>
+    <tr>
+        <td>Base price</td>
+        <td><?php echo $item->base_price; ?></td>
+    </tr>
+    <tr>
+        <td>SKU</td>
+        <td><?php echo $item->sku; ?></td>
+    </tr>
+    <tr>
+        <td>GTIN</td>
+        <td><?php echo $item->gtin; ?></td>
+    </tr>
+</table>
+
+<p>
+    <a href="<?php $helper->routing->route([ "products" => $parentItem->id, "variants" => $item->id ], "edit"); ?>">Edit</a>
+    &middot;
+    <a href="<?php $helper->routing->route([ "products" => $parentItem->id, "variants" => $item->id ], "delete"); ?>">Delete</a>
+</p>
+<p><a href="<?php $helper->routing->route([ "products" => $parentItem->id, "variants" ]); ?>">Back to index</a></p>

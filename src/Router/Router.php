@@ -26,13 +26,14 @@ class Router
             }
         } else {
             foreach ($chunks as $index => $chunk) {
-                if ($chunk == "add" || $chunk == "edit" || $chunk == "delete") {
-                    $params["action"] = $chunk;
-                    $key = null;
-                } else if ($key) {
-                    $params["id"] = $chunk;
-                    $params["ids"][$key] = $chunk;
-                    $key = null;
+                if ($key) {
+                    if ($chunk == "add" || $chunk == "edit" || $chunk == "delete") {
+                        $params["action"] = $chunk;
+                    } else {
+                        $params["id"] = $chunk;
+                        $params["ids"][$key] = $chunk;
+                        $key = null;
+                    }
                 } else if (isset($collection[$chunk])) {
                     $params["id"] = null;
                     $handler = $collection[$chunk]["handler"];

@@ -24,8 +24,12 @@ class Query
     {
         $parts = [];
         foreach ($conditions as $key => $value) {
-            $parts[] = "{$key} = ?";
-            $this->params[] = $value;
+            if ($value === null) {
+                $parts[] = "{$key} IS NULL";
+            } else {
+                $parts[] = "{$key} = ?";
+                $this->params[] = $value;
+            }
         }
 
         $this->sql = implode(" AND ", $parts);

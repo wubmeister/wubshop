@@ -23,7 +23,9 @@ class Products extends Crud
 
     protected function filterItemsForIndex($items)
     {
-        $items->link("product_type", [ "id" => "product_type_id" ], [ "product_type" => "name" ]);
+        $items
+            ->filter([ "parent_id" => null ])
+            ->link("product_type", [ "id" => "product_type_id" ], [ "product_type" => "name" ]);
     }
 
     protected function parseItemForShow($item)

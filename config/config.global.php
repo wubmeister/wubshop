@@ -7,7 +7,12 @@ return [
                 "handler" => "App\\Controller\\Products"
             ],
             "products" => [
-                "handler" => "App\\Controller\\Products"
+                "handler" => "App\\Controller\\Products",
+                "children" => [
+                    "variants" => [
+                        "handler" => "App\\Controller\\Products\\Variants"
+                    ]
+                ]
             ],
             "product-types" => [
                 "handler" => "App\\Controller\\ProductTypes",
