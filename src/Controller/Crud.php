@@ -6,6 +6,7 @@ use App\Controller\Feature\AbstractFeature;
 use App\HttpException;
 use App\MutableArray;
 use App\Template;
+use App\Tree;
 use App\View\View;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -17,6 +18,7 @@ abstract class Crud
     protected $layout;
     protected $view;
     protected $request;
+    protected $navigation;
     protected $features = [];
 
     protected $templatePath = "crud";
@@ -61,6 +63,7 @@ abstract class Crud
 
         $this->request = $request;
         $this->layout = new View(Template::find("layout"));
+        $this->layout->assign("navigation", $this->navigation);
 
         if ($id) return $this->$action($id);
         return $this->$action();
@@ -70,6 +73,11 @@ abstract class Crud
     {
         $feature->setController($this);
         $this->features[$name] = $feature;
+    }
+
+    public function setNavigation(Tree $navigation)
+    {
+        $this->navigation = $navigation;
     }
 
     protected function isAllowed($action)

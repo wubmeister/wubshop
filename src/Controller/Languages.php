@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Db\Schema;
 use App\Form\Field\Field;
 use App\Form\Form;
+use App\Tree;
 
 class Languages extends Crud
 {
@@ -18,6 +19,13 @@ class Languages extends Crud
     public function __construct(Schema $schema)
     {
         $this->table = $schema->table("language");
+    }
+
+    public function setNavigation(Tree $navigation)
+    {
+        parent::setNavigation($navigation);
+
+        $navigation->cascadeProperty("settings/languages", "active", true);
     }
 
     protected function getForm($purpose)

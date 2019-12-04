@@ -4,6 +4,7 @@ use App\Db\Connection;
 use App\HttpException;
 use App\Router\Router;
 use App\Session\Session;
+use App\Tree;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\ServerRequest;
 
@@ -45,7 +46,35 @@ try {
         $connection = new Connection($config["db"]["driver"], $config["db"]["config"]);
         $session = new Session($connection->schema("webshop"));
 
+        $navigation = Tree::fromArray([ "children" => [
+            "products" => [
+                "url" => "/products",
+                "label" => "Products",
+                "children" => [
+                    "types" => [
+                        "url" => "/product-types",
+                        "label" => "Types"
+                    ],
+                ]
+            ],
+            "settings" => [
+                "url" => "/settings",
+                "label" => "Settings",
+                "children" => [
+                    "channels" => [
+                        "url" => "/channels",
+                        "label" => "Channels"
+                    ],
+                    "languages" => [
+                        "url" => "/languages",
+                        "label" => "Languages"
+                    ],
+                ]
+            ],
+        ]]);
+
         $controller = new $controllerClass($connection->schema("webshop"));
+        $controller->setNavigation($navigation);
         $response = $controller($request);
 
     }

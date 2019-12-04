@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Db\Schema;
 use App\Form\Field\Field;
 use App\Form\Form;
+use App\Tree;
 
 class Channels extends Crud
 {
@@ -18,6 +19,13 @@ class Channels extends Crud
     public function __construct(Schema $schema)
     {
         $this->table = $schema->table("channel");
+    }
+
+    public function setNavigation(Tree $navigation)
+    {
+        parent::setNavigation($navigation);
+
+        $navigation->cascadeProperty("settings/channels", "active", true);
     }
 
     protected function getForm($purpose)

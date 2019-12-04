@@ -6,6 +6,7 @@ use App\Db\Schema;
 use App\Form\Field\Field;
 use App\Form\Field\Options;
 use App\Form\Form;
+use App\Tree;
 
 class Products extends Crud
 {
@@ -19,6 +20,13 @@ class Products extends Crud
     public function __construct(Schema $schema)
     {
         $this->table = $schema->table("product");
+    }
+
+    public function setNavigation(Tree $navigation)
+    {
+        parent::setNavigation($navigation);
+
+        $navigation->cascadeProperty("products", "active", true);
     }
 
     protected function filterItemsForIndex($items)
