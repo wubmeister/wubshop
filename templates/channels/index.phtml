@@ -9,10 +9,10 @@
     <tbody>
         <?php foreach ($items as $channel): ?>
         <tr>
-            <td><a href="/channels/<?php echo $channel->id; ?>"><?php echo $channel->name; ?></a></td>
+            <td><a href="<?php $helper->routing->route([ "channels" => $channel->id ]); ?>"><?php echo $channel->name; ?></a></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
 
-<p><a href="/channels/add" class="button">Add channel</a></p>
+<p><a href="<?php $helper->routing->route([ "channels" ], "add"); ?>" class="button">Add channel</a></p>

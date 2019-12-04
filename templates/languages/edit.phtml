@@ -1,6 +1,6 @@
 <h2>Edit language</h2>
 
-<form method="post" action="/languages/edit/<?php echo $item->id; ?>">
+<form method="post" action="<?php $helper->routing->route([ "languages" => $item->id ], "edit"); ?>">
 
     <table class="form table">
         <tr>

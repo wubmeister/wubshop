@@ -2,7 +2,7 @@
 
 <p style="color: red;">Are you sure you want to delete this language? This can't be undone!</p>
 
-<form method="post" action="/languages/<?php echo $item->id; ?>/delete">
+<form method="post" action="<?php $helper->routing->route([ "languages" => $item->id ], "delete"); ?>">
     <input type="hidden" name="confirm" value="1" />
     <p>
         <button type="button" onclick="history.back()">Cancel</button>

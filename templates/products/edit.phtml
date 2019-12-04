@@ -1,6 +1,6 @@
 <h2>Edit product</h2>
 
-<form method="post" action="/products/edit/<?php echo $item->id; ?>">
+<form method="post" action="<?php $helper->routing->route([ "products" => $item->id ] , "edit"); ?>">
 
     <table class="form table">
         <tr>

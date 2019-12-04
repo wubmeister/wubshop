@@ -1,6 +1,6 @@
 <h2>Add a language</h2>
 
-<form method="post" action="/languages/add">
+<form method="post" action="<?php $helper->routing->route([ "languages" ], "add"); ?>">
 
     <table class="form table">
         <tr>

@@ -1,9 +1,9 @@
 <h2>Product type</h2>
 
 <ul class="tabs">
-    <li class="active"><a href="/product-types/<?php echo $item->id; ?>">Product type</a></li>
-    <li><a href="/product-types/<?php echo $item->id; ?>/edit">Edit</a></li>
-    <li><a href="/product-types/<?php echo $item->id; ?>/attributes">Attributes</a></li>
+    <li class="active"><a href="<?php $helper->routing->route([ "product-types" => $item->id ]); ?>">Product type</a></li>
+    <li><a href="<?php $helper->routing->route([ "product-types" => $item->id ] , "edit"); ?>">Edit</a></li>
+    <li><a href="<?php $helper->routing->route([ "product-types" => $item->id, "attributes" ]); ?>">Attributes</a></li>
 </ul>
 
 <table class="detail table">
@@ -14,7 +14,7 @@
 </table>
 
 <p>
-    <a href="/product-types/<?php echo $item->id; ?>/edit" class="button">Edit</a>
-    <a href="/product-types/<?php echo $item->id; ?>/delete" class="button">Delete</a>
+    <a href="<?php $helper->routing->route([ "product-types" => $item->id ] , "edit"); ?>" class="button">Edit</a>
+    <a href="<?php $helper->routing->route([ "product-types" => $item->id ] , "delete"); ?>" class="button">Delete</a>
 </p>
-<p><a href="/product-types">Back to index</a></p>
+<p><a href="<?php $helper->routing->route([ "product-types" ]); ?>">Back to index</a></p>

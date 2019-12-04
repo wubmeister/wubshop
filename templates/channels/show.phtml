@@ -8,7 +8,7 @@
 </table>
 
 <p>
-    <a href="/channels/<?php echo $item->id; ?>/edit" class="button">Edit</a>
-    <a href="/channels/<?php echo $item->id; ?>/delete" class="button">Delete</a>
+    <a href="<?php $helper->routing->route([ "channels" => $item->id ], "edit"); ?>" class="button">Edit</a>
+    <a href="<?php $helper->routing->route([ "channels" => $item->id ], "delete"); ?>" class="button">Delete</a>
 </p>
-<p><a href="/channels">Back to index</a></p>
+<p><a href="<?php $helper->routing->route([ "channels" ]); ?>">Back to index</a></p>

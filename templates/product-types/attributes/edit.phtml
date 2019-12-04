@@ -1,6 +1,6 @@
 <h2>Edit attribute</h2>
 
-<form method="post" action="/product-types/<?php echo $parentItem->id; ?>/attributes/edit/<?php echo $item->id; ?>">
+<form method="post" action="<?php $helper->routing->route([ "product-types" => $parentItem->id, "attributes" => $item->id ] , "edit"); ?>">
 
     <table class="form table">
         <tr>

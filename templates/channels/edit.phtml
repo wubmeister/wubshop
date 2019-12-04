@@ -1,6 +1,6 @@
 <h2>Edit channel</h2>
 
-<form method="post" action="/channels/edit/<?php echo $item->id; ?>">
+<form method="post" action="<?php $helper->routing->route([ "channels" => $item->id ], "edit"); ?>">
 
     <table class="form table">
         <tr>

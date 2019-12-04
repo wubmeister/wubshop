@@ -11,7 +11,7 @@
     <tbody>
         <?php foreach ($items as $language): ?>
         <tr>
-            <td><a href="/languages/<?php echo $language->id; ?>"><?php echo $language->name; ?></a></td>
+            <td><a href="<?php $helper->routing->route([ "languages" => $language->id ]); ?>"><?php echo $language->name; ?></a></td>
             <td><?php echo $language->localized_name; ?></td>
             <td><?php echo $language->lang_code; ?></td>
         </tr>
@@ -19,4 +19,4 @@
     </tbody>
 </table>
 
-<p><a href="/languages/add" class="button">Add language</a></p>
+<p><a href="<?php $helper->routing->route([ "languages" ] , "add"); ?>" class="button">Add language</a></p>

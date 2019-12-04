@@ -1,6 +1,6 @@
 <h2>Add a product type</h2>
 
-<form method="post" action="/product-types/add">
+<form method="post" action="<?php $helper->routing->route([ "product-types" ] , "add"); ?>">
 
     <table class="form table">
         <tr>

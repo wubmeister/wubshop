@@ -2,7 +2,7 @@
 
 <p style="color: red;">Are you sure you want to delete this attribute? This can't be undone!</p>
 
-<form method="post" action="/product-types/<?php echo $parentItem->id; ?>/attributes/<?php echo $item->id; ?>/delete">
+<form method="post" action="<?php $helper->routing->route([ "product-types" => $parentItem->id, "attributes" => $item->id ] , "delete"); ?>">
     <input type="hidden" name="confirm" value="1" />
     <p>
         <button type="button" onclick="history.back()">Cancel</button>

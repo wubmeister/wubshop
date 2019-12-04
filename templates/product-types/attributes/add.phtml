@@ -1,6 +1,6 @@
 <h2>Add an attribute</h2>
 
-<form method="post" action="/product-types/<?php echo $parentItem->id; ?>/attributes/add">
+<form method="post" action="<?php $helper->routing->route([ "product-types" => $parentItem->id, "attributes"] , "add"); ?>">
 
     <table class="form table">
         <tr>

@@ -20,7 +20,7 @@
 </table>
 
 <p>
-    <a href="/product-types/<?php echo $parentItem->id; ?>/attributes/<?php echo $item->id; ?>/edit" class="button">Edit</a>
-    <a href="/product-types/<?php echo $parentItem->id; ?>/attributes/<?php echo $item->id; ?>/delete" class="button">Delete</a>
+    <a href="<?php $helper->routing->route([ "product-types" => $parentItem->id, "attributes" => $item->id ] , "edit"); ?>" class="button">Edit</a>
+    <a href="<?php $helper->routing->route([ "product-types" => $parentItem->id, "attributes" => $item->id ] , "delete"); ?>" class="button">Delete</a>
 </p>
-<p><a href="/product-types/<?php echo $parentItem->id; ?>/attributes">Back to index</a></p>
+<p><a href="<?php $helper->routing->route([ "product-types" => $parentItem->id, "attributes"  ]); ?>">Back to index</a></p>

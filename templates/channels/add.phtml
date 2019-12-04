@@ -1,6 +1,6 @@
 <h2>Add a channel</h2>
 
-<form method="post" action="/channels/add">
+<form method="post" action="<?php $helper->routing->route([ "channels" ], "add"); ?>">
 
     <table class="form table">
         <tr>

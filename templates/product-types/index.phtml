@@ -9,10 +9,10 @@
     <tbody>
         <?php foreach ($items as $type): ?>
         <tr>
-            <td><a href="/product-types/<?php echo $type->id; ?>"><?php echo $type->name; ?></a></td>
+            <td><a href="<?php $helper->routing->route([ "product-types" => $type->id ]); ?>"><?php echo $type->name; ?></a></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
 
-<p><a href="/product-types/add" class="button">Add product type</a></p>
+<p><a href="<?php $helper->routing->route([ "product-types" ] , "add"); ?>" class="button">Add product type</a></p>

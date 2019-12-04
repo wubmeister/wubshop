@@ -16,7 +16,7 @@
 </table>
 
 <p>
-    <a href="/languages/<?php echo $item->id; ?>/edit" class="button">Edit</a>
-    <a href="/languages/<?php echo $item->id; ?>/delete" class="button">Delete</a>
+    <a href="<?php $helper->routing->route([ "languages" => $item->id ], "edit"); ?>" class="button">Edit</a>
+    <a href="<?php $helper->routing->route([ "languages" => $item->id ], "delete"); ?>" class="button">Delete</a>
 </p>
-<p><a href="/languages">Back to index</a></p>
+<p><a href="<?php $helper->routing->route([ "languages" ]); ?>">Back to index</a></p>

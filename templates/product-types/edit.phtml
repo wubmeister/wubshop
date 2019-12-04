@@ -1,12 +1,12 @@
 <h2>Edit product type</h2>
 
 <ul class="tabs">
-    <li><a href="/product-types/<?php echo $item->id; ?>">Product type</a></li>
-    <li class="active"><a href="/product-types/edit/<?php echo $item->id; ?>">Edit</a></li>
-    <li><a href="/product-types/<?php echo $item->id; ?>/attributes">Attributes</a></li>
+    <li><a href="<?php $helper->routing->route([ "product-types" => $item->id ]); ?>">Product type</a></li>
+    <li class="active"><a href="<?php $helper->routing->route([ "product-types" => $item->id ] , "edit"); ?>">Edit</a></li>
+    <li><a href="<?php $helper->routing->route([ "product-types" => $item->id, "attributes" ]); ?>">Attributes</a></li>
 </ul>
 
-<form method="post" action="/product-types/edit/<?php echo $item->id; ?>">
+<form method="post" action="<?php $helper->routing->route([ "product-types" => $item->id ] , "edit"); ?>">
 
     <table class="form table">
         <tr>
