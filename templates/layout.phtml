@@ -31,19 +31,49 @@ function renderTree($tree, $maxLevel = null)
     <meta charset="utf-8" />
     <title>Webshop Management</title>
     <style>
+        *, :before, :after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, Arial, sans-serif;
+            line-height: 1.45;
+        }
+
+        .topbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            border-bottom: 1px solid #ebebeb;
+            height: 70px;
+        }
+        .topbar h1 {
+            margin: 0;
+            padding: 11px 20px;
+        }
+
         .sidebar {
+            position: fixed;
+            top: 70px;
+            bottom: 0;
+            left: 0;
             width: 320px;
+            padding: 20px;
             border-right: 1px solid #ebebeb;
-            float: left;
         }
 
         .content {
             margin-left: 320px;
-            padding: 0 20px 0 20px;
+            padding: 70px 20px 0 20px;
         }
 
         .errors {
             color: red;
+        }
+
+        a[href] {
+            color: #09f;
         }
 
         ul.nav {
@@ -115,28 +145,29 @@ function renderTree($tree, $maxLevel = null)
             width: 120px;
             font-weight: bold;
         }
+
+        .button {
+            display: inline-block;
+            text-decoration: none;
+            padding: 8px 12px;
+            background-color: #e0e0e0;
+            color: #444 !important;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 0.85em;
+        }
+        .button:hover {
+            background-color: #d0d0d0;
+        }
     </style>
 </head>
 <body>
-    <h1>Webshop</h1>
+    <div class="topbar">
+        <h1>Webshop</h1>
+    </div>
 
     <div class="sidebar">
         <?php renderTree($navigation); ?>
-        <!--<ul>
-            <li>
-                <a href="/products">Products</a>
-                <ul>
-                    <li><a href="/product-types">Types</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="/settings">Settings</a>
-                <ul>
-                    <li><a href="/channels">Channels</a></li>
-                    <li><a href="/languages">Languages</a></li>
-                </ul>
-            </li>
-        </ul>-->
     </div>
     <div class="content">
         <?php echo $content; ?>

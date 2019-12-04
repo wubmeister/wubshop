@@ -7,7 +7,7 @@ use App\Controller\Crud;
 use App\Db\Schema;
 use App\Form\Field\Field;
 use App\Form\Form;
-
+use App\Tree;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Variants extends Crud
@@ -23,6 +23,13 @@ class Variants extends Crud
     public function __construct(Schema $schema)
     {
         $this->table = $schema->table("product");
+    }
+
+    public function setNavigation(Tree $navigation)
+    {
+        parent::setNavigation($navigation);
+
+        $navigation->cascadeProperty("products", "active", true);
     }
 
     public function __invoke(ServerRequestInterface $request)

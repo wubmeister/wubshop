@@ -30,8 +30,7 @@
 </table>
 
 <p>
-    <a href="<?php $helper->routing->route([ "products" => $item->id ], "edit"); ?>">Edit</a>
-    &middot;
-    <a href="<?php $helper->routing->route([ "products" => $item->id ], "delete"); ?>">Delete</a>
+    <a href="<?php $helper->routing->route([ "products" => $item->id ], "edit"); ?>" class="button">Edit</a>
+    <a href="<?php $helper->routing->route([ "products" => $item->id ], "delete"); ?>" class="button">Delete</a>
 </p>
 <p><a href="<?php $helper->routing->route([ "products" ]); ?>">Back to index</a></p>

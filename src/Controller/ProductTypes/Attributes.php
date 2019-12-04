@@ -8,6 +8,7 @@ use App\Db\Schema;
 use App\Form\Field\Field;
 use App\Form\Field\Options;
 use App\Form\Form;
+use App\Tree;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Attributes extends Crud
@@ -18,6 +19,13 @@ class Attributes extends Crud
     public function __construct(Schema $schema)
     {
         $this->table = $schema->table("attribute");
+    }
+
+    public function setNavigation(Tree $navigation)
+    {
+        parent::setNavigation($navigation);
+
+        $navigation->cascadeProperty("products/types", "active", true);
     }
 
     public function __invoke(ServerRequestInterface $request)
