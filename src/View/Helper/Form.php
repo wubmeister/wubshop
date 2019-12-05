@@ -9,13 +9,8 @@ class Form
         echo '<label for="' . $field->getId() . '">' . $label . '</label>' . PHP_EOL;
     }
 
-    public function textField($field, $label = null)
+    public function errors($field)
     {
-        echo '<div class="field">' . PHP_EOL;
-        if ($label) {
-            $this->label($field, $label);
-        }
-        echo '<input type="text" name="' . $field->getFullName() . '" id="' . $field->getId() . '" value="' . $field->getValue() . '" />' . PHP_EOL;
         if (!$field->isValid()) {
             echo '<ul class="errors">' . PHP_EOL;
             foreach ($field->getErrors() as $error) {
@@ -23,6 +18,16 @@ class Form
             }
             echo '</ul>' . PHP_EOL;
         }
+    }
+
+    public function textField($field, $label = null)
+    {
+        echo '<div class="field">' . PHP_EOL;
+        if ($label) {
+            $this->label($field, $label);
+        }
+        echo '<input type="text" name="' . $field->getFullName() . '" id="' . $field->getId() . '" value="' . $field->getValue() . '" />' . PHP_EOL;
+        $this->errors($field);
         echo '</div>' . PHP_EOL;
     }
 
@@ -37,13 +42,7 @@ class Form
             echo '<option value="' . $key . '"' . ($field->isSelected($value) ? ' selected' : '') . '>' . $value . '</option>';
         }
         echo '</select>';
-        if (!$field->isValid()) {
-            echo '<ul class="errors">' . PHP_EOL;
-            foreach ($field->getErrors() as $error) {
-                echo '<li>' . $error . '</li>' . PHP_EOL;
-            }
-            echo '</ul>' . PHP_EOL;
-        }
+        $this->errors($field);
         echo '</div>' . PHP_EOL;
     }
 
@@ -55,13 +54,7 @@ class Form
         }
         echo '<input type="hidden" name="' . $field->getFullName() . '" value="0" />' . PHP_EOL;
         echo '<input type="checkbox" name="' . $field->getFullName() . '" id="' . $field->getId() . '" value="1"' . ($field->getValue() == '1' ? ' checked' : '') . ' />' . PHP_EOL;
-        if (!$field->isValid()) {
-            echo '<ul class="errors">' . PHP_EOL;
-            foreach ($field->getErrors() as $error) {
-                echo '<li>' . $error . '</li>' . PHP_EOL;
-            }
-            echo '</ul>' . PHP_EOL;
-        }
+        $this->errors($field);
         echo '</div>' . PHP_EOL;
     }
 }

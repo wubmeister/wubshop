@@ -1,0 +1,128 @@
+*, :before, :after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, Arial, sans-serif;
+    line-height: 1.45;
+}
+
+.topbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    border-bottom: 1px solid #ebebeb;
+    height: 70px;
+}
+.topbar h1 {
+    margin: 0;
+    padding: 11px 20px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 70px;
+    bottom: 0;
+    left: 0;
+    width: 320px;
+    padding: 20px;
+    border-right: 1px solid #ebebeb;
+}
+
+.content {
+    margin-left: 320px;
+    padding: 70px 20px 0 20px;
+}
+
+.errors {
+    color: red;
+}
+
+a[href] {
+    color: #09f;
+}
+
+ul.nav {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+ul.nav ul.nav {
+    padding-left: 1rem;
+}
+ul.nav li a {
+    color: #666;
+    text-decoration: none;
+}
+ul.nav li.active > a {
+    color: #000;
+    font-weight: bold;
+}
+
+.tabs {
+    margin: 0 -10px 1rem -10px;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    border-bottom: 1px solid #ebebeb;
+}
+.tabs li {
+    display: block;
+    margin-bottom: -1px;
+}
+.tabs li a {
+    display: block;
+    padding: 8px 10px;
+    border-bottom: 3px solid transparent;
+    color: #666;
+    text-decoration: none;
+}
+.tabs li a:hover {
+    color: #000;
+}
+.tabs li.active a {
+    color: #000;
+    border-bottom-color: #000;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border: none;
+}
+.table td, .table th {
+    padding: 8px 10px;
+}
+.table td:first-child, .table th:first-child {
+    padding-left: 0;
+}
+.table td:last-child, .table th:last-child {
+    padding-right: 0;
+}
+.table thead th {
+    text-align: left;
+    border-bottom: 2px solid #ebebeb;
+}
+.table tbody tr + tr td {
+    border-top: 1px solid #ebebeb;
+}
+.form.table td:first-child,
+.detail.table td:first-child {
+    width: 120px;
+    font-weight: bold;
+}
+
+.button {
+    display: inline-block;
+    text-decoration: none;
+    padding: 8px 12px;
+    background-color: #e0e0e0;
+    color: #444 !important;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 0.85em;
+}
+.button:hover {
+    background-color: #d0d0d0;
+}
