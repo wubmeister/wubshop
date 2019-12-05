@@ -2,15 +2,31 @@
 
 namespace App\Router;
 
+/**
+ * A router to route URLs to handlers.
+ *
+ * @author Wubbo Bos
+ */
 class Router
 {
+    /** @var array $routes */
     protected $routes;
 
+    /**
+     * Constructor
+     *
+     * @param array $routes
+     */
     public function __construct(array $routes)
     {
         $this->routes = $routes;
     }
 
+    /**
+     * Resolves a URL to a handler with parameters.
+     *
+     * @return array [ "hander" => $handler, "params" => $parameters ]
+     */
     public function resolve(string $method, string $uri)
     {
         $trimmedUri = trim($uri, '/');
