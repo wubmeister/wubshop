@@ -4,7 +4,7 @@ return [
     "router" => [
         "routes" => [
             "/" => [
-                "handler" => "App\\Controller\\Products"
+                "handler" => "App\\Controller\\Dashboard"
             ],
             "products" => [
                 "handler" => "App\\Controller\\Products",
