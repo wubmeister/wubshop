@@ -4,12 +4,28 @@ namespace App\Session;
 
 use App\Db\Schema;
 
+/**
+ * Class to store session data
+ *
+ * @author Wubbo Bos
+ */
 class Session
 {
+    /** @var array $data The session data */
     protected $data = [];
+
+    /** @var string $sid The session ID */
     protected $sid;
+
+    /** @var App\Db\Schema $schema The schema to save the session in */
     protected $schema;
 
+    /**
+     * Constructor
+     *
+     * @param App\Db\Schema $schema The schema to save the session in
+     * @param string $sid Pass a session ID to restore a specific session instead of looking up the session ID in the cookie
+     */
     public function __construct(Schema $schema, $sid = null)
     {
         $this->schema = $schema;
@@ -39,6 +55,9 @@ class Session
         $this->sid = $sid;
     }
 
+    /**
+     * Upon destructing the session object, save the current state to the database
+     */
     public function __destruct()
     {
         $this->schema->update("s_session", [
@@ -47,6 +66,11 @@ class Session
         ], [ "sid" => $this->sid ]);
     }
 
+    /**
+     * Creates a new session with a unique session ID
+     *
+     * @return string The session ID
+     */
     protected function makeNewSession()
     {
         $it = 0;
