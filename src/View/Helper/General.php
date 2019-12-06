@@ -4,8 +4,19 @@ namespace App\View\Helper;
 
 use App\Tree;
 
+/**
+ * Helper to provide some trivial methods
+ *
+ * @author Wubbo Bos
+ */
 class General
 {
+    /**
+     * Renders a tree as an unordered list
+     *
+     * @param App\Tree $tree
+     * @param int|null $maxLevel The maximum depth to render
+     */
     public function tree(Tree $tree, $maxLevel = null)
     {
         if ($maxLevel !== null && !$maxLevel) {

@@ -2,8 +2,19 @@
 
 namespace App\View\Helper;
 
+/**
+ * Helper with all routing related methods
+ *
+ * @author Wubbo Bos
+ */
 class Routing
 {
+    /**
+     * Outputs a URL for the specified routes
+     *
+     * @param array $path
+     * @param srting $action Optional.
+     */
     public function route(array $path, $action = null)
     {
         $output = "";
