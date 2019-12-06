@@ -27,6 +27,7 @@ class Renderer
      * Renders a file with the current variables
      *
      * @param string $file The path to the file to render
+     * @return string The rendered content
      */
     public function render(string $file)
     {
