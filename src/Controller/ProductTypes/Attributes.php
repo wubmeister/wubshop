@@ -2,13 +2,13 @@
 
 namespace App\Controller\ProductTypes;
 
-use App\Controller\Crud;
-use App\Controller\Feature\Parenting;
-use App\Db\Schema;
-use App\Form\Field\Field;
-use App\Form\Field\Options;
-use App\Form\Form;
-use App\Tree;
+use Lib\Controller\Crud;
+use Lib\Controller\Feature\Parenting;
+use Lib\Db\Schema;
+use Lib\Form\Field\Field;
+use Lib\Form\Field\Options;
+use Lib\Form\Form;
+use Lib\Tree;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Attributes extends Crud

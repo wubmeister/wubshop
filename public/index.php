@@ -1,10 +1,10 @@
 <?php
 
-use App\Db\Connection;
-use App\HttpException;
-use App\Router\Router;
-use App\Session\Session;
-use App\Tree;
+use Lib\Db\Connection;
+use Lib\HttpException;
+use Lib\Router\Router;
+use Lib\Session\Session;
+use Lib\Tree;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\ServerRequest;
 

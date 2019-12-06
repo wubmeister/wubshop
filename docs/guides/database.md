@@ -17,7 +17,7 @@ To make a connection, you create a Connection instance:
 ```
 <?php
 
-use App\Db\Connection;
+use Lib\Db\Connection;
 
 $conn = new Connection([
 	"adapter" => "mysql",

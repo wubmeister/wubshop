@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\Db\Schema;
-use App\Tree;
-use App\Template;
-use App\View\View;
+use Lib\Db\Schema;
+use Lib\Tree;
+use Lib\Template;
+use Lib\View\View;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
 
