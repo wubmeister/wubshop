@@ -7,6 +7,7 @@ use PDO;
 class Connection
 {
     protected $pdo;
+    protected $quoteChar = '"';
     protected $defaultDbName = "global";
     protected $schemas = [];
     protected $registeredSchemas;
@@ -42,6 +43,10 @@ class Connection
         $this->pdo = new PDO($dsn, $username, $password, $opts);
 
         $this->registeredSchemas = $schemas;
+
+        if ($driver == "mysql") {
+            $this->quoteChar = '`';
+        }
     }
 
     public function beginTransaction()
@@ -129,5 +134,11 @@ class Connection
             }
         }
         return $this->schemas[$name];
+    }
+
+    public function quoteIdentifier($identifier)
+    {
+        $qc = $this->quoteChar;
+        return $qc . str_replace('.', "{$qc}.{$qc}", $identifier) . $qc;
     }
 }

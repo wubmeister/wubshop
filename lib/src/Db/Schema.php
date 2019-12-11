@@ -95,7 +95,7 @@ class Schema
 
     public function update(string $tableName, array $data, $where)
     {
-        $query = Query::factory($where);
+        $query = Query::factory($where, $this->connection);
         $rows = $this->fetchAll("SELECT * FROM {$tableName}" . $query->getSql(), $query->getBindValues());
         if (count($rows)) {
             $keys = array_keys($data);
@@ -122,7 +122,7 @@ class Schema
 
     public function delete(string $tableName, $where)
     {
-        $query = Query::factory($where);
+        $query = Query::factory($where, $this->connection);
         $rows = $this->fetchAll("SELECT * FROM {$tableName}" . $query->getSql(), $query->getBindValues());
         if (count($rows)) {
             $sql = "DELETE FROM {$tableName}" . $query->getSql();

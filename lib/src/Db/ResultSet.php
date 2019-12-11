@@ -58,19 +58,20 @@ class ResultSet implements Iterator
 
     public function link($table, $cond, $columns = null)
     {
+        $connection = $this->table->getSchema()->getConnection();
         $conditions = [];
         $srcTable = $this->table->getName();
         foreach ($cond as $linked => $src) {
-            $conditions[] = "{$table}.{$linked} = {$srcTable}.{$src}";
+            $conditions[] = $connection->quoteIdentifier("{$table}.{$linked}") . ' = ' . $connection->quoteIdentifier("{$srcTable}.{$src}") ;
         }
         $this->links[] = [ "table" => $table, "cond" => implode(" AND ", $conditions) ];
 
         if ($columns) {
             foreach ($columns as $key => $column) {
                 if (is_numeric($key)) {
-                    $this->columns[] = "{$table}.{$column}";
+                    $this->columns[] = $connection->quoteIdentifier("{$table}.{$column}");
                 } else {
-                    $this->columns[] = "{$table}.{$column} AS {$key}";
+                    $this->columns[] = $connection->quoteIdentifier("{$table}.{$column}") . " AS " . $connection->quoteIdentifier($key);
                 }
             }
         } else {
@@ -95,9 +96,13 @@ class ResultSet implements Iterator
 
     public function filterLinked($table, $rightCol, $cond, $columns = null)
     {
+        $connection = $this->table->getSchema()->getConnection();
         $conditions = [];
         $srcTable = $this->table->getName();
-        $this->filterLink = [ "table" => $table, "cond" => "{$srcTable}.id = {$table}.{$rightCol}" ];
+        $this->filterLink = [
+            "table" => $table,
+            "cond" => $connection->quoteIdentifier("{$srcTable}.id") . ' = ' . $connection->quoteIdentifier("{$table}.{$rightCol}")
+        ];
         $conditions = [];
         foreach ($cond as $key => $value) {
             $conditions["{$table}.{$key}"] = $value;
@@ -107,9 +112,9 @@ class ResultSet implements Iterator
         if ($columns) {
             foreach ($columns as $key => $column) {
                 if (is_numeric($key)) {
-                    $this->columns[] = "{$table}.{$column}";
+                    $this->columns[] = $connection->quoteIdentifier("{$table}.{$column}");
                 } else {
-                    $this->columns[] = "{$table}.{$column} AS {$key}";
+                    $this->columns[] = $connection->quoteIdentifier("{$table}.{$column}") . " AS " . $connection->quoteIdentifier($key);
                 }
             }
         } else {
@@ -134,21 +139,25 @@ class ResultSet implements Iterator
 
     protected function fetch()
     {
-        $query = Query::factory($this->query);
-        $sql = "SELECT {$this->table->getName()}.*";
+        $connection = $this->table->getSchema()->getConnection();
+        $query = Query::factory($this->query, $connection);
+        $tableName = $connection->quoteIdentifier($this->table->getName());
+        $sql = "SELECT {$tableName}.*";
 
         if (count($this->columns)) {
             $sql .= ", " . implode(", ", $this->columns);
         }
 
         if ($this->filterLink) {
-            $sql .= " FROM {$this->filterLink['table']} LEFT JOIN {$this->table->getName()} ON {$this->filterLink['cond']}";
+            $linkTable = $connection->quoteIdentifier($this->filterLink['table']);
+            $sql .= " FROM {$linkTable} LEFT JOIN {$tableName} ON {$this->filterLink['cond']}";
         } else {
-            $sql .= " FROM {$this->table->getName()}";
+            $sql .= " FROM {$tableName}";
         }
 
         foreach ($this->links as $link) {
-            $sql .= " LEFT JOIN {$link['table']} ON {$link['cond']}";
+            $linkTable = $connection->quoteIdentifier($link['table']);
+            $sql .= " LEFT JOIN {$linkTable} ON {$link['cond']}";
         }
 
         $sql .= $query->getSql();
@@ -157,11 +166,11 @@ class ResultSet implements Iterator
             $orders = [];
             foreach ($this->orderBy as $key => $value) {
                 if (is_numeric($key)) {
-                    $orders[] = "{$value} ASC";
+                    $orders[] = $connection->quoteIdentifier($value) . " ASC";
                 } else {
                     $value = strtoupper($value);
                     $value = in_array($value, [ "ASC", "DESC" ]) ? $value : "ASC";
-                    $orders[] = "{$key} {$value}";
+                    $orders[] = $connection->quoteIdentifier($key) . " {$value}";
                 }
             }
             $sql .= " ORDER BY " . implode(", ", $orders);
