@@ -2,18 +2,42 @@
 
 namespace Lib\Db;
 
+/**
+ * Class to build a query from a conditions array
+ *
+ * @author Wubbo Bos
+ */
 class Query
 {
+    /** @var string $sql The generated SQL */
     protected $sql;
+
+    /** @var Connection $connection */
     protected $connection;
+
+    /** @var array $params */
     protected $params = [];
 
+    /**
+     * The factory ensures that you get a Query instance, whether you input a
+     * conditions array or a Query instance
+     *
+     * @param Query|array $query
+     * @param Connection $connection
+     * @return Query
+     */
     public static function factory($query, Connection $connection = null)
     {
         if ($query instanceof Query) return $query;
         return new Query($query, $connection);
     }
 
+    /**
+     * Constructor
+     *
+     * @param array $conditions Conditions array
+     * @param Connection $connection
+     */
     public function __construct($conditions, Connection $connection)
     {
         $this->connection = $connection;
@@ -22,6 +46,12 @@ class Query
         }
     }
 
+    /**
+     * Converts conditions to a string
+     *
+     * @param array $conditions
+     * @return string
+     */
     protected function parseConditions($conditions)
     {
         $parts = [];
@@ -38,11 +68,23 @@ class Query
         $this->sql = implode(" AND ", $parts);
     }
 
+    /**
+     * Returns the SQL clause as string
+     *
+     * @param string $clause 'WHERE' or 'HAVING'
+     * @return string
+     */
     public function getSql($clause = "WHERE")
     {
-        return $this->sql ? " WHERE {$this->sql}" : "";
+        $clause = strtoupper($clause);
+        return $this->sql ? " {$clause} {$this->sql}" : "";
     }
 
+    /**
+     * Returns the bind values
+     *
+     * @return array
+     */
     public function getBindValues()
     {
         return $this->params;

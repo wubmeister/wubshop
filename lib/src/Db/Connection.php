@@ -4,15 +4,36 @@ namespace Lib\Db;
 
 use PDO;
 
+/**
+ * Provides a database connection
+ *
+ * @author Wubbo Bos
+ */
 class Connection
 {
+    /** @var PDO $pdo */
     protected $pdo;
+
+    /** @var string $quoteChar The character to use to quote identifiers */
     protected $quoteChar = '"';
+
+    /** @var string $defaultDbName */
     protected $defaultDbName = "global";
+
+    /** @var array $schemas All loaded schemas */
     protected $schemas = [];
+
+    /** @var array $schemas All registered schemas, which are basically aliases */
     protected $registeredSchemas;
 
-    public function __construct($driver, array $options, array $schemas = [])
+    /**
+     * Constructor
+     *
+     * @param string $driver The driver ('mysql', 'sqlite' etc.)
+     * @param array $options Options to connect, like host, username and password
+     * @param array $schemas Optional. Schema aliases
+     */
+    public function __construct(string $driver, array $options, array $schemas = [])
     {
         $username = null;
         if (isset($options["username"])) {
@@ -48,6 +69,8 @@ class Connection
             $this->quoteChar = '`';
         }
     }
+
+    // Here are some PDO pass-through methods
 
     public function beginTransaction()
     {
@@ -119,6 +142,12 @@ class Connection
         return $this->pdo->setAttribute($attribute, $value);
     }
 
+    /**
+     * Gets a schema with the specified name
+     *
+     * @param string $name If no name is given, the default schema will be returned
+     * @return Schema
+     */
     public function schema($name = null)
     {
         if (!$name) $name = $this->defaultDbName;
@@ -136,6 +165,12 @@ class Connection
         return $this->schemas[$name];
     }
 
+    /**
+     * Quotes an identifier
+     *
+     * @param string $identifier
+     * @return string The quoted identifier
+     */
     public function quoteIdentifier($identifier)
     {
         $qc = $this->quoteChar;
