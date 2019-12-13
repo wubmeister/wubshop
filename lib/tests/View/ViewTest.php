@@ -1,9 +1,9 @@
 <?php
 
-use App\View\View;
+use Lib\View\View;
 use PHPUnit\Framework\TestCase;
 
-final class App_View_ViewTest extends TestCase
+final class Lib_View_ViewTest extends TestCase
 {
     public function testCanRenderFile()
     {

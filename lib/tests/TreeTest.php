@@ -1,9 +1,9 @@
 <?php
 
-use App\Tree;
+use Lib\Tree;
 use PHPUnit\Framework\TestCase;
 
-final class App_TreeTest extends TestCase
+final class Lib_TreeTest extends TestCase
 {
     public function testCanBeCreatedFromArray()
     {

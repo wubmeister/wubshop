@@ -1,9 +1,9 @@
 <?php
 
-use App\MutableArray;
+use Lib\MutableArray;
 use PHPUnit\Framework\TestCase;
 
-final class App_MutableArrayTest extends TestCase
+final class Lib_MutableArrayTest extends TestCase
 {
     public function testCanInitialize()
     {

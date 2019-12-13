@@ -1,9 +1,9 @@
 <?php
 
-use App\Router\Router;
+use Lib\Router\Router;
 use PHPUnit\Framework\TestCase;
 
-final class App_Router_RouterTest extends TestCase
+final class Lib_Router_RouterTest extends TestCase
 {
     protected $config = [
         "/" => [

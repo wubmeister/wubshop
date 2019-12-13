@@ -1,9 +1,9 @@
 <?php
 
-use App\View\Helper;
+use Lib\View\Helper;
 use PHPUnit\Framework\TestCase;
 
-final class App_View_HelperTest extends TestCase
+final class Lib_View_HelperTest extends TestCase
 {
     public function testLoadHelper()
     {
@@ -11,6 +11,6 @@ final class App_View_HelperTest extends TestCase
         $generalHelper = $helper->general;
 
         $this->assertIsObject($generalHelper);
-        $this->assertInstanceOf("App\\View\\Helper\\General", $generalHelper);
+        $this->assertInstanceOf("Lib\\View\\Helper\\General", $generalHelper);
     }
 }
