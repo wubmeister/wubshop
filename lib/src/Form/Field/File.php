@@ -2,14 +2,27 @@
 
 namespace Lib\Form\Field;
 
-class FileUploadField extends Field
+/**
+ * Class to represent a file upload field
+ *
+ * @author Wubbo Bos
+ */
+class File extends Field
 {
+    /**
+     * Returns the value of the corresponding entry in the $_FILES variable
+     *
+     * @retun array
+     */
     public function getValue()
     {
         return isset($_FILES[$this->name]) ? $_FILES[$this->name] : null;
     }
 
-    public function setValue($value)
+    /**
+     * Overrides the setValue from Field, because no value setting is needed.
+     */
+    public function setValue($value, $filter = true)
     {
     }
 }
