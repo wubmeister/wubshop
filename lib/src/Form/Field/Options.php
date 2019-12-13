@@ -2,31 +2,65 @@
 
 namespace Lib\Form\Field;
 
+/**
+ * Class to represent a form field with selection options
+ *
+ * @author Wubbo Bos
+ */
 class Options extends Field
 {
+    /** @var array $options */
     protected $options = [];
 
+    /**
+     * Constructor
+     *
+     * @param string $name
+     * @param array $options Here you can specify the selection options with the key "options"
+     */
     public function __construct($name, array $options = [])
     {
         parent::__construct($name, $options);
         if (isset($options["options"])) $this->setOptions($options["options"]);
     }
 
+    /**
+     * Sets and overrides the selection options
+     *
+     * @var array $options [ $value => $label ]
+     */
     public function setOptions(array $options)
     {
         $this->options = $options;
     }
 
+    /**
+     * Adds an option
+     *
+     * @var string $value
+     * @var string $label
+     */
     public function addOption($value, $label)
     {
         $this->options[$value] = $label;
     }
 
+    /**
+     * Returns all the selection options as [ $value => $label ]
+     *
+     * @return array
+     */
     public function getOptions()
     {
         return $this->options;
     }
 
+    /**
+     * Checks if a certain value is selected
+     *
+     * @param mixed $value
+     * @return bool
+     */
     public function isSelected($value)
     {
         if ($this->isArray) return in_array($value, $this->value);

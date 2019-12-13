@@ -3,7 +3,7 @@
 use Lib\Form\Field\File as FileField;
 use PHPUnit\Framework\TestCase;
 
-final class App_Field_FieldTest extends TestCase
+final class Lib_Field_FileTest extends TestCase
 {
     public function testGetFileValue()
     {
