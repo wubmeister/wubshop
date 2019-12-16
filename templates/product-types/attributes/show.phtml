@@ -1,5 +1,13 @@
 <h2>Attribute</h2>
 
+<ul class="tabs">
+<?php foreach ($subnav->getChildren() as $node): ?>
+    <?php if (!$node->hidden): ?>
+    <li <?php if ($node->active) echo ' class="active"'; ?>><a href="<?php echo $node->url; ?>"><?php echo $node->label; ?></a></li>
+    <?php endif; ?>
+<?php endforeach; ?>
+</ul>
+
 <table class="detail table">
     <tr>
         <td>Name</td>

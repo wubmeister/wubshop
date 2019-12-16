@@ -19,6 +19,13 @@ class Attributes extends Crud
     public function __construct(Schema $schema)
     {
         $this->table = $schema->table("attribute");
+        $this->subnav = Tree::fromArray([ "children" => [
+            "show_parent" => [ "label" => "Product", "url" => "/product-types/:parent_id" ],
+            "edit_parent" => [ "label" => "Edit", "url" => "/product-types/edit/:parent_id" ],
+            "index" => [ "label" => "Attributes", "url" => "/product-types/:parent_id/attributes" ],
+            "show" => [ "label" => "Attribute", "url" => "/product-types/:parent_id/attributes/:id" ],
+            "edit" => [ "label" => "Edit attribute", "url" => "/product-types/:parent_id/attributes/edit/:id" ],
+        ]]);
     }
 
     public function setNavigation(Tree $navigation)
@@ -42,6 +49,12 @@ class Attributes extends Crud
             "product_type_has_attribute"));
 
         return parent::__invoke($request);
+    }
+
+    protected function filterItemsForIndex($items)
+    {
+        $this->subnav->setPathProperty("show", "hidden", true);
+        $this->subnav->setPathProperty("edit", "hidden", true);
     }
 
     protected function getForm($purpose)

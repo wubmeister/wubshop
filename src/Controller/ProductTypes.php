@@ -20,6 +20,11 @@ class ProductTypes extends Crud
     public function __construct(Schema $schema)
     {
         $this->table = $schema->table("product_type");
+        $this->subnav = Tree::fromArray([ "children" => [
+            "show" => [ "label" => "Product type", "url" => "/product-types/:id" ],
+            "edit" => [ "label" => "Edit", "url" => "/product-types/edit/:id" ],
+            "attributes" => [ "label" => "Attributes", "url" => "/product-types/:id/attributes" ],
+        ]]);
     }
 
     public function setNavigation(Tree $navigation)
