@@ -23,8 +23,9 @@ class Parenting extends AbstractFeature
 
     public function setupNavigation($navigation, $subnav)
     {
-        var_dump("setup nav");
-        $subnav->cascadePropertyReplace(":parent_id", $this->parentId);
+        if ($subnav) {
+            $subnav->cascadePropertyReplace("url", ":parent_id", $this->parentId);
+        }
     }
 
     public function filterItemsForIndex($items)

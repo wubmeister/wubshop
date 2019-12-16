@@ -57,6 +57,7 @@ class Attributes extends Crud
         ], "required" => true ]));
         $form->addField(new Field("is_array"));
         $form->addField(new Field("units"));
+        $form->addField(new Field("is_targeted"));
 
         return $form;
     }

@@ -19,6 +19,10 @@
             <td><?php $helper->form->label($form->getField("units"), "Units"); ?></td>
             <td><?php $helper->form->textField($form->getField("units")); ?></td>
         </tr>
+        <tr>
+            <td><?php $helper->form->label($form->getField("is_targeted"), "Is targeted"); ?></td>
+            <td><?php $helper->form->checkbox($form->getField("is_targeted")); ?></td>
+        </tr>
     </table>
 
     <button type="submit">Save</button>

@@ -11,6 +11,8 @@
         <tr>
             <th>Attribute</th>
             <th>Type</th>
+            <th>Array</th>
+            <th>Targeted</th>
         </tr>
     </thead>
     <tbody>
@@ -18,6 +20,8 @@
         <tr>
             <td><a href="<?php $helper->routing->route([ "product-types" => $parentItem->id, "attributes" => $attribute->id ]); ?>"><?php echo $attribute->name; ?></a></td>
             <td><?php echo $attribute->data_type; ?></td>
+            <td><?php echo $attribute->is_array ? 'yes' : 'no'; ?></td>
+            <td><?php echo $attribute->is_targeted ? 'yes' : 'no'; ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
