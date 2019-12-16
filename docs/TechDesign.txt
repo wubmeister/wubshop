@@ -36,16 +36,6 @@ product_cache
 - target
 - data
 
-category
-- name
-- root (category)
-- left_bound
-- right_bound
-
-category_has_product
-- category
-- product
-
 address
 - name
 - company
@@ -97,8 +87,8 @@ product_has_promotion
 - customer_group
 - promotion
 
-category_has_promotion
-- category
+page_has_promotion
+- page
 - customer_group
 - promotion
 
@@ -126,9 +116,9 @@ voucher_applies_to_product
 - voucher
 - product
 
-voucher_applies_to_category
+voucher_applies_to_page
 - voucher
-- category
+- page
 
 store
 
@@ -163,8 +153,8 @@ product_rental_price
 - rental_tariff_group
 - price
 
-category_rental_price
-- category
+page_rental_price
+- page
 - target
 - rental_period
 - price
@@ -251,11 +241,6 @@ target
 target_has_product
 - target
 - product
-- is_visible
-
-target_has_category
-- target
-- category
 - is_visible
 
 attribute
@@ -427,9 +412,9 @@ campaign_has_product
 - product
 - priority
 
-campaign_has_category
+campaign_has_page
 - campaign
-- category
+- page
 - priority
 
 campaign_product_cache
@@ -437,17 +422,28 @@ campaign_product_cache
 - product
 - priority
 
-navigation
-- name
+page
+- title
 - label
 - url
 - left_bound
 - right_bound
-- page (optional)       |
-- category (optional)   | One of these
 
-page
+block
 - title
+- type
+- content
+- settings
+
+page_has_block
+- page
+- block
+- left_bound
+- right_bound
+
+page_has_product
+- page
+- product
 
 ---
 
