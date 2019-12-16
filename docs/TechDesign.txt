@@ -1,0 +1,487 @@
+Webshop / E-commerce
+
+user
+- name
+- auth_provider
+- auth_id
+- role
+- status
+- password
+- salt
+
+vat_rule
+- name
+
+country
+- name
+- language
+
+country_vat_rule
+- vat_rule
+- country
+- amount
+
+product
+- name
+- product_type
+- parent
+- default_price
+- default_discount_price
+- vat_rule
+- sku
+- ean
+
+product_cache
+- product_id
+- target
+- data
+
+category
+- name
+- root (category)
+- left_bound
+- right_bound
+
+category_has_product
+- category
+- product
+
+address
+- name
+- company
+- address_line_1
+- address_line_2
+- postal_code
+- locality
+
+customer
+- full_name
+- gender
+- first_name
+- middle_name
+- last_name
+- email
+- phone
+- nl_optin
+- nl_optin_origin
+- password
+- salt
+
+customer_has_address
+- customer
+- type (billing|shipping)
+- address
+- is_default
+
+customer_payment_method
+- psp
+- account_data (ENCRYPTED!)
+
+customer_group
+
+customer_group_has_customer
+- customer_group
+- customer
+
+promotion
+- product
+- start_date
+- end_date
+- type (percentage|discount|fixed_price)
+- amount
+- is_exclusive
+- is_final
+
+product_has_promotion
+- product
+- customer_group
+- promotion
+
+category_has_promotion
+- category
+- customer_group
+- promotion
+
+product_price_now
+- product
+- customer_group
+- price
+- price_from
+- promotion
+
+voucher
+- valid_from
+- valid_until
+- type (percentage|discount|fixed_price|free_product)
+
+customer_has_voucher
+- customer
+- voucher
+
+customer_group_has_voucher
+- customer_group
+- voucher
+
+voucher_applies_to_product
+- voucher
+- product
+
+voucher_applies_to_category
+- voucher
+- category
+
+store
+
+store_has_product
+- store
+- product
+- stock
+
+store_stock_mutation
+- store
+- product
+- mutation
+
+rental_period
+- name
+- type (day|week|weekend|midweek|holiday|...)
+- start_day
+- start_time
+- end_day
+- end_time
+
+rental_tariff_group
+- name
+- start_date
+- end_date
+- is_recurring
+
+product_rental_price
+- product
+- target
+- rental_period
+- rental_tariff_group
+- price
+
+category_rental_price
+- category
+- target
+- rental_period
+- price
+
+rental_price_cache
+- product
+- target
+- rental_period
+- rental_tariff_group
+- start_date
+- end_date
+- price
+- custom_price
+- status
+
+offer_invoice
+- type (offer|invoice)
+- identifier
+- offer_date
+- expiration_date
+- customer
+- address
+- total_ex_vat
+- total_vat
+- total_inc_vat
+- status
+
+offer_invoice_section
+- offer
+- title
+
+offer_invoice_line
+- offer_section
+- position
+- quantity
+- quantity_unit
+- price_per_unit
+- price
+- vat_rule
+
+transaction
+- psp
+- status
+
+order
+- type (order|booking|offer_request)
+- customer
+- status
+- transaction
+- affiliate
+- invoice
+
+order_has_product
+- product
+- quantity
+- rental_period
+- rental_start
+- rental_end
+- price_per_unit
+- price
+
+order_has_voucher
+- order
+- voucher
+
+feed
+- name
+- type
+
+channel
+- name
+- url
+
+language
+- name
+- localized_name
+- lang_code
+
+target
+- name
+- channel (optional)
+- language (optional)
+
+target_has_product
+- target
+- product
+- is_visible
+
+target_has_category
+- target
+- category
+- is_visible
+
+attribute
+- name
+- data_type
+- is_array
+- units
+- targeted
+
+attribute_group
+- name
+
+attribute_group_has_attribute
+- attribute_group
+- attribute
+
+attribute_has_option
+- attribute
+- language
+- name
+- label
+- position
+- layout_data (color/image/...)
+
+attribute_translation
+- attribute
+- language
+- label
+
+attribute_group_translation
+- attribute_group
+- language
+- label
+
+product_type
+- name
+
+product_type_has_attribute
+- product_type
+- attribute
+
+product_attribute_value
+- product
+- target                If the attribute isn't targeted, this has to be the ID of the global target (no channel, no language)
+- nullify               | -> For removing a property from the parent target
+- option                |
+- str_value             |
+- int_value             | One of these, depending on attribute type
+- float_value           |
+- serialized_value      |
+
+form
+- name
+
+form_section
+- form
+- label
+- visibility_conditions
+
+form_field
+- form
+- type
+- attribute_id
+- name
+- label
+- position
+- visibility_conditions
+
+template
+- name
+- type (email|offer|invoice)
+
+media
+- type
+- original_filename
+- mimetype
+- handler
+- handler_settings
+- filesize
+- width
+- height
+- duration
+
+media_translation
+- media
+- language
+- title
+- alt
+- description
+- tags
+
+product_has_media
+- product
+- media
+- target
+- position
+- category
+
+product_has_media_category
+- product
+- media
+- target
+- category
+
+review
+- product
+- variation (product)
+- language
+- author
+- author_email
+- rating (0-10)
+- title
+- description
+- up_votes
+- down_votes
+
+review_bullet
+- review
+- type (pro|con|tip)
+- description
+- position
+
+review_has_media
+- review
+- media
+
+review_has_comment
+- review
+- author
+- description
+- up_votes
+- down_votes
+
+shipping_rule
+
+shipping
+- shipping_rule
+- country
+- costs
+
+carrier
+- name
+
+shipping_carrier
+- shipping
+- carrier
+
+filter
+- attribute
+- type (open|single_select|multi_select)
+- filter_field (option_id|str_value|int_value|float_value)
+
+campaign
+- name
+- audience
+- start_date
+- end_date
+
+campaign_channel
+- campaign
+- channel (like google_ads, newsletter, ...)
+
+campaign_has_customer_group
+- campaign
+- customer_group
+
+campaign_has_product
+- campaign
+- product
+- priority
+
+campaign_has_category
+- campaign
+- category
+- priority
+
+campaign_product_cache
+- campaign
+- product
+- priority
+
+navigation
+- name
+- label
+- url
+- left_bound
+- right_bound
+- page (optional)       |
+- category (optional)   | One of these
+
+page
+- title
+
+---
+
+Producten
+    Types
+        -
+            Eigenschappen
+    Categorieën
+Campagnes
+    Campagnes
+    Statistieken
+Offertes
+Facturen
+Reviews
+Statistieken
+Webshop
+    Winkels
+    Bestellingen
+Verhuur
+    Boekingen
+    Beschikbaarheid
+    Periodes
+    Tariefgroepen
+    Prijslijst
+Instellingen
+    Landen
+    Verzending
+        Verzendkosten
+        Bezorgdiensten
+    BTW-groepen
+    Templates
+        Offertes
+        Facturen
+        E-mails
+    Klanten
+    Reviews
+        Uitnodigingen
