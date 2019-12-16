@@ -63,7 +63,7 @@ class Field
      * Sets the value for the field
      *
      * @param mixed $value
-     * @param bool $filter Pass TRUE or omit to filter the value
+     * @param bool $filter Pass TRUE to filter the value
      */
     public function setValue($value, $filter = false)
     {
