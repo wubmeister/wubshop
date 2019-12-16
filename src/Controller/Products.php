@@ -21,13 +21,18 @@ class Products extends Crud
     public function __construct(Schema $schema)
     {
         $this->table = $schema->table("product");
+        $this->subnav = Tree::fromArray([ "children" => [
+            "show" => [ "label" => "Product", "url" => "/products/:id" ],
+            "edit" => [ "label" => "Edit", "url" => "/products/edit/:id" ],
+            "variants" => [ "label" => "Variants", "url" => "/products/:id/variants" ],
+        ]]);
     }
 
     public function setNavigation(Tree $navigation)
     {
         parent::setNavigation($navigation);
 
-        $navigation->cascadeProperty("products", "active", true);
+        $navigation->setPathProperty("products", "active", true);
     }
 
     protected function filterItemsForIndex($items)

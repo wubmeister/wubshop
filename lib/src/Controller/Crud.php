@@ -20,6 +20,7 @@ abstract class Crud
     protected $request;
     protected $navigation;
     protected $features = [];
+    protected $subnav;
 
     protected $templatePath = "crud";
     protected $baseRoute = "/crud";
@@ -61,9 +62,19 @@ abstract class Crud
             throw new HttpException(401);
         }
 
+        if ($this->subnav) {
+            $this->subnav->setPathProperty($action, "active", true);
+            if ($id) {
+                $this->subnav->cascadePropertyReplace("url", ":id", $id);
+            }
+        }
+
+        $this->trigger("setupNavigation", $this->navigation, $this->subnav);
+
         $this->request = $request;
         $this->layout = new View(Template::find("layout"));
         $this->layout->assign("navigation", $this->navigation);
+        $this->layout->assign("subnav", $this->subnav);
 
         if ($id) return $this->$action($id);
         return $this->$action();
@@ -231,6 +242,7 @@ abstract class Crud
 
     abstract protected function getForm($purpose);
 
+    protected function setupNavigation($navigation, $subnav){}
     protected function filterItemsForIndex($items){}
     protected function parseItemForShow($item){}
     protected function filterValues($values){}

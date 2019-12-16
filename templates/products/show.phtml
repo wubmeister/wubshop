@@ -1,9 +1,9 @@
 <h2>Product</h2>
 
 <ul class="tabs">
-    <li class="active"><a href="<?php $helper->routing->route([ "products" => $item->id ]); ?>">Product</a></li>
-    <li><a href="<?php $helper->routing->route([ "products" => $item->id ], "edit"); ?>">Edit</a></li>
-    <li><a href="<?php $helper->routing->route([ "products" => $item->id, "variants" ]); ?>">Variants</a></li>
+<?php foreach ($subnav->getChildren() as $node): ?>
+    <li <?php if ($node->active) echo ' class="active"'; ?>><a href="<?php echo $node->url; ?>"><?php echo $node->label; ?></a></li>
+<?php endforeach; ?>
 </ul>
 
 <table class="detail table">

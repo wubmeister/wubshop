@@ -22,4 +22,5 @@ class AbstractFeature
     public function filterValues($values){}
     public function afterSave($item){}
     public function beforeRender($view){}
+    public function setupNavigation($navigation, $subnav){}
 }

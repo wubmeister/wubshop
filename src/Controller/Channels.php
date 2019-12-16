@@ -26,7 +26,7 @@ class Channels extends Crud
     {
         parent::setNavigation($navigation);
 
-        $navigation->cascadeProperty("settings/channels", "active", true);
+        $navigation->setPathProperty("settings/channels", "active", true);
     }
 
     protected function getForm($purpose)

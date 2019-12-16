@@ -22,13 +22,20 @@ class Variants extends Crud
     public function __construct(Schema $schema)
     {
         $this->table = $schema->table("product");
+        $this->subnav = Tree::fromArray([ "children" => [
+            "show_parent" => [ "label" => "Product", "url" => "/products/:parent_id" ],
+            "edit_parent" => [ "label" => "Edit", "url" => "/products/edit/:parent_id" ],
+            "index" => [ "label" => "Variants", "url" => "/products/:parent_id/variants" ],
+            "show" => [ "label" => "Product variant", "url" => "/products/:parent_id/variants/:id" ],
+            "edit" => [ "label" => "Edit variant", "url" => "/products/:parent_id/variants/edit/:id" ]
+        ]]);
     }
 
     public function setNavigation(Tree $navigation)
     {
         parent::setNavigation($navigation);
 
-        $navigation->cascadeProperty("products", "active", true);
+        $navigation->setPathProperty("products", "active", true);
     }
 
     public function __invoke(ServerRequestInterface $request)
@@ -38,12 +45,18 @@ class Variants extends Crud
         $this->baseRoute = "/products/{$this->parentId}/variants";
 
         $this->parentItem = $this->table->findOne([ "id" => $this->parentId ]);
+        if ($this->subnav) {
+            $this->subnav->cascadePropertyReplace("url", ":parent_id", $this->parentId);
+        }
 
         return parent::__invoke($request);
     }
 
     protected function filterItemsForIndex($items)
     {
+        $this->subnav->setPathProperty("show", "hidden", true);
+        $this->subnav->setPathProperty("edit", "hidden", true);
+
         $items->filter([ "parent_id" => $this->parentId ]);
         // $items->link("product_type", [ "id" => "product_type_id" ], [ "product_type" => "name" ]);
     }

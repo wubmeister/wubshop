@@ -25,7 +25,7 @@ class Attributes extends Crud
     {
         parent::setNavigation($navigation);
 
-        $navigation->cascadeProperty("products/types", "active", true);
+        $navigation->setPathProperty("products/types", "active", true);
     }
 
     public function __invoke(ServerRequestInterface $request)

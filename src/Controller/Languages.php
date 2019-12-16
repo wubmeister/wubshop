@@ -26,7 +26,7 @@ class Languages extends Crud
     {
         parent::setNavigation($navigation);
 
-        $navigation->cascadeProperty("settings/languages", "active", true);
+        $navigation->setPathProperty("settings/languages", "active", true);
     }
 
     protected function getForm($purpose)

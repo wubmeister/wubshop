@@ -33,7 +33,7 @@ final class Lib_TreeTest extends TestCase
         $this->assertArrayHasKey("lorem", $children);
     }
 
-    public function testCanCascadeProperties()
+    public function testCanSetPathProperties()
     {
         $tree = Tree::fromArray([
             "foo" => 1,
@@ -46,7 +46,7 @@ final class Lib_TreeTest extends TestCase
             ]
         ]);
 
-        $tree->cascadeProperty("ipsum/doler", "prop", "value");
+        $tree->setPathProperty("ipsum/doler", "prop", "value");
 
         $children = $tree->getChildrenNamed();
         $this->assertEquals("value", $children["ipsum"]->prop);
@@ -54,10 +54,10 @@ final class Lib_TreeTest extends TestCase
         $this->assertEquals("value", $children["doler"]->prop);
     }
 
-    public function testCanCascadeReplace()
+    public function testCanCascadeReplaceFromRoot()
     {
         $tree = Tree::fromArray([
-            "foo" => 1,
+            "foo" => "Foo #name#",
             "bar" => 2,
             "children" => [
                 "lorem" => [ "foo" => "Lorem #name#", "bar" => 4 ],
@@ -67,8 +67,9 @@ final class Lib_TreeTest extends TestCase
             ]
         ]);
 
-        $tree->cascadePropertyReplace("ipsum/doler", "foo", "#name#", "Test");
+        $tree->cascadePropertyReplace("foo", "#name#", "Test");
 
+        $this->assertEquals("Foo Test", $tree->foo);
         $children = $tree->getChildrenNamed();
         $this->assertEquals("Ipsum Test", $children["ipsum"]->foo);
         $children = $children["ipsum"]->getChildrenNamed();

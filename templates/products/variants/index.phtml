@@ -1,9 +1,11 @@
 <h2>Variants of <?php echo $parentItem->title; ?></h2>
 
 <ul class="tabs">
-    <li><a href="<?php $helper->routing->route([ "products" => $parentItem->id ]); ?>">Product</a></li>
-    <li><a href="<?php $helper->routing->route([ "products" => $parentItem->id ], "edit"); ?>">Edit</a></li>
-    <li class="active"><a href="<?php $helper->routing->route([ "products" => $parentItem->id, "variants" ]); ?>">Variants</a></li>
+<?php foreach ($subnav->getChildren() as $node): ?>
+    <?php if (!$node->hidden): ?>
+    <li <?php if ($node->active) echo ' class="active"'; ?>><a href="<?php echo $node->url; ?>"><?php echo $node->label; ?></a></li>
+    <?php endif; ?>
+<?php endforeach; ?>
 </ul>
 
 <table class="index table">

@@ -26,7 +26,7 @@ class ProductTypes extends Crud
     {
         parent::setNavigation($navigation);
 
-        $navigation->cascadeProperty("products/types", "active", true);
+        $navigation->setPathProperty("products/types", "active", true);
     }
 
     protected function getForm($purpose)

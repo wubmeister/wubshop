@@ -21,6 +21,12 @@ class Parenting extends AbstractFeature
         $this->linkTable = $linkTable;
     }
 
+    public function setupNavigation($navigation, $subnav)
+    {
+        var_dump("setup nav");
+        $subnav->cascadePropertyReplace(":parent_id", $this->parentId);
+    }
+
     public function filterItemsForIndex($items)
     {
         $filter = [];

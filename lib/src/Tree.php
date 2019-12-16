@@ -139,7 +139,7 @@ class Tree
      * @param string $name The prperty name
      * @param mixed $value
      */
-    public function cascadeProperty($path, $name, $value)
+    public function setPathProperty($path, $name, $value)
     {
         if (!is_array($path)) {
             $path = explode('/', trim($path, '/'));
@@ -153,7 +153,7 @@ class Tree
         }
 
         if (count($path) > 0 && isset($this->namedChildren[$path[0]])) {
-            $this->children[$this->namedChildren[$path[0]]]->cascadeProperty($path, $name, $value);
+            $this->children[$this->namedChildren[$path[0]]]->setPathProperty($path, $name, $value);
         }
     }
 
@@ -165,23 +165,14 @@ class Tree
      * @param string $search
      * @param mixed $replace
      */
-    public function cascadePropertyReplace($path, $name, $search, $replace)
+    public function cascadePropertyReplace($name, $search, $replace)
     {
-        if (!is_array($path)) {
-            $path = explode('/', trim($path, '/'));
+        if (isset($this->properties[$name])) {
+            $this->properties[$name] = str_replace($search, $replace, $this->properties[$name]);
         }
 
-        if (count($path) == 0 || ($this->name && $path[0] != $this->name)) return;
-
-        if ($this->name) {
-            if (isset($this->properties[$name])) {
-                $this->properties[$name] = str_replace($search, $replace, $this->properties[$name]);
-            }
-            array_shift($path);
-        }
-
-        if (count($path) > 0 && isset($this->namedChildren[$path[0]])) {
-            $this->children[$this->namedChildren[$path[0]]]->cascadePropertyReplace($path, $name, $search, $replace);
+        foreach ($this->children as $child) {
+            $child->cascadePropertyReplace($name, $search, $replace);
         }
     }
 }
