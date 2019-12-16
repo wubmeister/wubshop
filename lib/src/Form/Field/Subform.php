@@ -46,7 +46,7 @@ class Subform extends Field
     }
 
     /**
-     * Sets the values for one or multiple fields
+     * Sets the values for one or more fields
      *
      * @param array $value The values: [ "fieldname" => $value ]
      * @param bool $filter Pass TRUE to filter the value

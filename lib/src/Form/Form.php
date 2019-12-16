@@ -4,11 +4,25 @@ namespace Lib\Form;
 
 use Lib\Form\Field\Field;
 
+/**
+ * Represents a form
+ *
+ * @author Wubbo Bos
+ */
 class Form
 {
+    /** @var array $fields All the fields in the form */
     protected $fields = [];
+
+    /** @var array $fieldOrder The field names in their correct order */
     protected $fieldOrder = [];
 
+    /**
+     * Adds a field to the form
+     *
+     * @param Field $field
+     * @return Subform $this
+     */
     public function addField(Field $field)
     {
         $name = $field->getName();
@@ -16,6 +30,11 @@ class Form
         $this->fields[$name] = $field;
     }
 
+    /**
+     * Returns all the fields in the correct order
+     *
+     * @return array
+     */
     public function getFields()
     {
         $fields = [];
@@ -25,6 +44,13 @@ class Form
         return $fields;
     }
 
+    /**
+     * Sets the values for one or more fields
+     *
+     * @param array $value The values: [ "fieldname" => $value ]
+     * @param bool $filter Pass TRUE to filter the value
+     * @return Form $this
+     */
     public function setValues(array $values, $filter = false)
     {
         foreach ($values as $key => $value) {
@@ -32,8 +58,15 @@ class Form
                 $this->fields[$key]->setValue($value, $filter);
             }
         }
+
+        return $this;
     }
 
+    /**
+     * Returns the values of all the fields in the form
+     *
+     * @return array
+     */
     public function getValues()
     {
         $values = [];
@@ -44,11 +77,23 @@ class Form
         return $values;
     }
 
+    /**
+     * Returns a field with the specified name.
+     *
+     * @param string $name
+     * @return Field|null If no field is found with the specified name, NULL is returned
+     */
     public function getField($name)
     {
         return isset($this->fields[$name]) ? $this->fields[$name] : null;
     }
 
+    /**
+     * Method to check if all the fields in the form are valid.
+     * If one or more fields are not valid, this will return false.
+     *
+     * @return bool
+     */
     public function isValid()
     {
         $valid = true;
@@ -61,6 +106,11 @@ class Form
         return $valid;
     }
 
+    /**
+     * Returns all the validation error messages
+     *
+     * @return array
+     */
     public function getErrors()
     {
         $errors = [];
