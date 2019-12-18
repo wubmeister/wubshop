@@ -8,16 +8,13 @@ use Lib\MutableArray;
 use Lib\Template;
 use Lib\Tree;
 use Lib\View\View;
-use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\Response\RedirectResponse;
 
-abstract class Crud
+abstract class Crud extends Rest
 {
     protected $table;
-    protected $layout;
     protected $view;
-    protected $request;
     protected $navigation;
     protected $features = [];
     protected $subnav;
@@ -25,59 +22,19 @@ abstract class Crud
     protected $templatePath = "crud";
     protected $baseRoute = "/crud";
 
-    public function __invoke(ServerRequestInterface $request)
+    protected function beforeDispatch(string $action)
     {
-        $method = $request->getMethod();
-        $id = $request->getAttribute("id");
-        $forcedAction = $request->getAttribute("action");
-        $action = "index";
-
-        if ($forcedAction) {
-            $action = $forcedAction;
-        } else {
-            switch ($method) {
-                case "POST":
-                case "PUT":
-                    $action = $id ? "update" : "create";
-                    break;
-
-                case "DELETE":
-                    if ($id) $action = "delete";
-                    else throw new HttpException(405);
-                    break;
-
-                case "GET":
-                    $action = $id ? "show" : "index";
-                    break;
-
-                default:
-                    throw new HttpException(405);
-            }
-        }
-
-        if (!method_exists($this, $action)) {
-            throw new HttpException(404);
-        }
-        if (!$this->isAllowed($action)) {
-            throw new HttpException(401);
-        }
-
         if ($this->subnav) {
             $this->subnav->setPathProperty($action, "active", true);
-            if ($id) {
-                $this->subnav->cascadePropertyReplace("url", ":id", $id);
+            if ($this->id) {
+                $this->subnav->cascadePropertyReplace("url", ":id", $this->id);
             }
         }
 
         $this->trigger("setupNavigation", $this->navigation, $this->subnav);
 
-        $this->request = $request;
-        $this->layout = new View(Template::find("layout"));
         $this->layout->assign("navigation", $this->navigation);
         $this->layout->assign("subnav", $this->subnav);
-
-        if ($id) return $this->$action($id);
-        return $this->$action();
     }
 
     public function addFeature(string $name, AbstractFeature $feature)
@@ -112,9 +69,9 @@ abstract class Crud
         return new HtmlResponse($this->layout->render());
     }
 
-    public function show($id)
+    public function show()
     {
-        $item = $this->table->findOne([ "id" => (int)$id ]);
+        $item = $this->table->findOne([ "id" => (int)$this->id ]);
 
         if (!$item) {
             throw new HttpException(404);
@@ -131,13 +88,13 @@ abstract class Crud
         return new HtmlResponse($this->layout->render());
     }
 
-    public function createOrUpdate($id = null)
+    public function createOrUpdate()
     {
         $purpose = "add";
         $item = null;
 
-        if ($id) {
-            $item = $this->table->findOne([ "id" => (int)$id ]);
+        if ($this->id) {
+            $item = $this->table->findOne([ "id" => (int)$this->id ]);
 
             if (!$item) {
                 throw new HttpException(404);
@@ -192,19 +149,19 @@ abstract class Crud
         return $this->createOrUpdate();
     }
 
-    public function edit($id)
+    public function edit()
     {
-        return $this->createOrUpdate($id);
+        return $this->createOrUpdate();
     }
 
-    public function update($id)
+    public function update()
     {
-        return $this->createOrUpdate($id);
+        return $this->createOrUpdate();
     }
 
-    public function delete($id)
+    public function delete()
     {
-        $item = $this->table->findOne([ "id" => (int)$id ]);
+        $item = $this->table->findOne([ "id" => (int)$this->id ]);
 
         if (!$item) {
             throw new HttpException(404);
@@ -213,11 +170,11 @@ abstract class Crud
         if ($this->request->getMethod() == "POST") {
             $post = $this->request->getParsedBody();
             if (isset($post["confirm"]) && $post["confirm"] == "1") {
-                $this->table->delete([ "id" => $id ]);
+                $this->table->delete([ "id" => $this->id ]);
                 return new RedirectResponse("{$this->baseRoute}");
             }
         } else if ($this->request->getMethod() == "DELETE") {
-            $this->table->delete([ "id" => $id ]);
+            $this->table->delete([ "id" => $this->id ]);
             return new RedirectResponse("{$this->baseRoute}");
         }
 
