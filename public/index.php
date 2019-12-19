@@ -1,6 +1,6 @@
 <?php
 
-use Lib\Db\Connection;
+use Lib\Db\Connection\Mysql as Connection;
 use Lib\HttpException;
 use Lib\Router\Router;
 use Lib\Session\Session;
@@ -43,7 +43,7 @@ try {
             $request = $request->withAttribute($key, $value);
         }
 
-        $connection = new Connection($config["db"]["driver"], $config["db"]["config"]);
+        $connection = new Connection($config["db"]["config"]);
         $session = new Session($connection->schema("webshop"));
 
         $navigation = Tree::fromArray([ "children" => [
@@ -73,7 +73,7 @@ try {
             ],
         ]]);
 
-        $controller = new $controllerClass($connection->schema("webshop"));
+        $controller = new $controllerClass($connection->schema("wubshop"));
         $controller->setNavigation($navigation);
         $response = $controller($request);
 

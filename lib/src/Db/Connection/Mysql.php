@@ -1,0 +1,54 @@
+<?php
+
+namespace Lib\Db\Connection;
+
+use PDO;
+use Exception;
+use Lib\Db\Connection;
+
+/**
+ * Provides a database connection
+ *
+ * @author Wubbo Bos
+ */
+class Mysql extends Connection
+{
+    /** @var string $quoteChar The character to use to quote identifiers */
+    protected $quoteChar = '`';
+
+    /**
+     * Constructor
+     *
+     * @param array $options Options to connect, like host, username and password
+     * @param array $schemas Optional. Schema aliases
+     */
+    public function __construct(array $options, array $schemas = [])
+    {
+        parent::__construct("mysql", $options, $schemas);
+    }
+
+    /**
+     * Fetches the columns from a table
+     *
+     * @param string $schemaName
+     * @param string $tableName
+     * @return array [ "column_name" => $info ]
+     */
+    public function getTableColumns(string $schemaName, string $tableName)
+    {
+        $sql = "SHOW COLUMNS FROM " . $this->quoteIdentifier("{$schemaName}.{$tableName}");
+        $stmt = $this->pdo->query($sql);
+        if (!$stmt) {
+            $err = $this->pdo->errorInfo();
+            throw new Exception($err[2]);
+        }
+        $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $columns = [];
+        foreach ($records as $record) {
+            $colName = $record["Field"];
+            $columns[$colName] = $record["Type"];
+        }
+
+        return $columns;
+    }
+}

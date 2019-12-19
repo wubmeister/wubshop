@@ -9,7 +9,7 @@ use PDO;
  *
  * @author Wubbo Bos
  */
-class Connection
+abstract class Connection
 {
     /** @var PDO $pdo */
     protected $pdo;
@@ -64,10 +64,6 @@ class Connection
         $this->pdo = new PDO($dsn, $username, $password, $opts);
 
         $this->registeredSchemas = $schemas;
-
-        if ($driver == "mysql") {
-            $this->quoteChar = '`';
-        }
     }
 
     // Here are some PDO pass-through methods
@@ -184,21 +180,5 @@ class Connection
      * @param string $tableName
      * @return array [ "column_name" => $info ]
      */
-    public function getTableColumns(string $schemaName, string $tableName)
-    {
-        $sql = "SHOW COLUMNS FROM " . $this->quoteIdentifier("{$schemaName}.{$tableName}");
-        $stmt = $this->pdo->query($sql);
-        if (!$stmt) {
-            $err = $this->pdo->errorInfo();
-            throw new Exception($err[2]);
-        }
-        $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $columns = [];
-        foreach ($records as $record) {
-            $colName = $record["Field"];
-            $columns[$colName] = $record["Type"];
-        }
-
-        return $columns;
-    }
+    abstract public function getTableColumns(string $schemaName, string $tableName);
 }
