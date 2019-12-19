@@ -176,4 +176,29 @@ class Connection
         $qc = $this->quoteChar;
         return $qc . str_replace('.', "{$qc}.{$qc}", $identifier) . $qc;
     }
+
+    /**
+     * Fetches the columns from a table
+     *
+     * @param string $schemaName
+     * @param string $tableName
+     * @return array [ "column_name" => $info ]
+     */
+    public function getTableColumns(string $schemaName, string $tableName)
+    {
+        $sql = "SHOW COLUMNS FROM " . $this->quoteIdentifier("{$schemaName}.{$tableName}");
+        $stmt = $this->pdo->query($sql);
+        if (!$stmt) {
+            $err = $this->pdo->errorInfo();
+            throw new Exception($err[2]);
+        }
+        $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $columns = [];
+        foreach ($records as $record) {
+            $colName = $record["Field"];
+            $columns[$colName] = $record["Type"];
+        }
+
+        return $columns;
+    }
 }

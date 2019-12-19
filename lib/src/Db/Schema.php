@@ -210,4 +210,15 @@ class Schema
         $stmt = $this->execute($sql, $bindValues);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    /**
+     * Fetches the columns from a table
+     *
+     * @param string $tableName
+     * @return array [ "column_name" => $info ]
+     */
+    public function getColumns(string $tableName)
+    {
+        return $this->connection->getTableColumns($this->name, $tableName);
+    }
 }

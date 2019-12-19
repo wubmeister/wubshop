@@ -15,6 +15,9 @@ class Table
     /** @var string $name */
     protected $name;
 
+    /** @var array $columns */
+    protected $columns;
+
     /**
      * Constructor
      *
@@ -25,6 +28,7 @@ class Table
     {
         $this->schema = $schema;
         $this->name = $name;
+        $this->columns = $this->schema->getColumns($name);
     }
 
     /**
@@ -78,7 +82,9 @@ class Table
      */
     public function insert($data)
     {
-        $data["created"] = date("Y-m-d H:i:s");
+        if (isset($this->columns["created"])) {
+            $data["created"] = date("Y-m-d H:i:s");
+        }
         return $this->schema->insert($this->name, $data);
     }
 
@@ -90,7 +96,9 @@ class Table
      */
     public function insertIgnore($data)
     {
-        $data["created"] = date("Y-m-d H:i:s");
+        if (isset($this->columns["created"])) {
+            $data["created"] = date("Y-m-d H:i:s");
+        }
         return $this->schema->insert($this->name, $data, true);
     }
 
@@ -102,7 +110,9 @@ class Table
      */
     public function update($data, $where)
     {
-        $data["modified"] = date("Y-m-d H:i:s");
+        if (isset($this->columns["modified"])) {
+            $data["modified"] = date("Y-m-d H:i:s");
+        }
         return $this->schema->update($this->name, $data, $where);
     }
 
